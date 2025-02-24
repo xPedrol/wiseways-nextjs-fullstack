@@ -1,0 +1,47 @@
+@tailwind base;
+// @tailwind components;
+@tailwind utilities;
+
+:root {
+  /** Base colors */
+  --clr-dark-a0: #000000;
+  --clr-light-a0: #ffffff;
+
+  /** Dark theme primary colors */
+  --clr-primary-a0: #7e46b7;
+  --clr-primary-a10: #8d5abf;
+  --clr-primary-a20: #9c6ec8;
+  --clr-primary-a30: #ab82d0;
+  --clr-primary-a40: #b996d8;
+  --clr-primary-a50: #c8abe0;
+
+  /** Dark theme surface colors */
+  --clr-surface-a0: #121212;
+  --clr-surface-a10: #282828;
+  --clr-surface-a20: #3f3f3f;
+  --clr-surface-a30: #575757;
+  --clr-surface-a40: #717171;
+  --clr-surface-a50: #8b8b8b;
+
+  /** Dark theme tonal surface colors */
+  --clr-surface-tonal-a0: #1d1820;
+  --clr-surface-tonal-a10: #322d35;
+  --clr-surface-tonal-a20: #48444b;
+  --clr-surface-tonal-a30: #605b62;
+  --clr-surface-tonal-a40: #78757a;
+  --clr-surface-tonal-a50: #928f93;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: var(--clr-light-a0);
+  background: var(--clr-surface-a0);
+  font-family: var(--font-dm-sans);
+}
+.custom-contaier {
+  @apply max-w-[1280px] max-xl:mx-4 mx-auto mt-10;
+}
