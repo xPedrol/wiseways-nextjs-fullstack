@@ -3,7 +3,7 @@ type InputProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
   tSize?: 'sm' | 'md'
 }
 export default function Textarea({ tSize = 'md', ...rest }: InputProps) {
-  let inputClass = tSize === 'md' ? 'py-3 text-md' : 'py-2 text-sm'
+  const inputClass = tSize === 'md' ? 'py-3 text-md' : 'py-2 text-sm'
   return (
     <textarea
       {...rest}

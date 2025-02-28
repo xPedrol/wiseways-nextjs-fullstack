@@ -19,15 +19,6 @@ export default function Input({ sufix, tSize = 'md', ...rest }: InputProps) {
     inputClass += ' pr-3'
   }
   return (
-    // <div className="relative">
-    //   <input
-    //     {...rest}
-    //     className="bg-surface-a10 placeholder-surface-a50 rounded-xl w-[100%] px-2 py-3"
-    //   />
-    //   {sufix && (
-    //     <span className="absolute top-4 right-4 text-surface-a50">{sufix}</span>
-    //   )}
-    // </div>
     <div className="relative">
       <input
         {...rest}
