@@ -20,29 +20,27 @@ export default async function NewExpense() {
         </div>
       </div>
       <div>
-        <form className="flex gap-2 flex-col">
-          <div className="flex flex-row flex-wrap gap-2 max-md:flex-col">
-            <Fieldset className="flex-1">
-              <Label>Valor</Label>
-              <Input
-                className="min-w-[350px]"
-                type="text"
-                placeholder="Digite o valor..."
-              />
-            </Fieldset>
-            <Fieldset className="flex-1">
-              <Label>Data</Label>
-              <Input type="date" />
-            </Fieldset>
-            <Fieldset className="flex-1">
-              <Label>Tag</Label>
-              <Select>
-                <SelectOption>Teste 1</SelectOption>
-                <SelectOption>Teste 1</SelectOption>
-                <SelectOption>Teste 1</SelectOption>
-              </Select>
-            </Fieldset>
-          </div>
+        <form className="flex gap-2 flex-col mx-auto max-w-[800px]">
+          <Fieldset className="flex-1">
+            <Label>Valor</Label>
+            <Input
+              className="min-w-[350px]"
+              type="text"
+              placeholder="Digite o valor..."
+            />
+          </Fieldset>
+          <Fieldset className="flex-1">
+            <Label>Data</Label>
+            <Input type="date" />
+          </Fieldset>
+          <Fieldset className="flex-1">
+            <Label>Tag</Label>
+            <Select>
+              <SelectOption>Teste 1</SelectOption>
+              <SelectOption>Teste 1</SelectOption>
+              <SelectOption>Teste 1</SelectOption>
+            </Select>
+          </Fieldset>
           <Fieldset>
             <Label>Descrição</Label>
             <Textarea rows={6} placeholder="Digite a descrição..." />

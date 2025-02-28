@@ -18,10 +18,13 @@ const userSchema = object({
   password: string().required('Senha obrigatória'),
 })
 export default function LoginForm() {
+  const [loading, setLoading] = useState(false)
   const submitMethod = async (data: TLogin) => {
     try {
+      setLoading(true)
       await signIn('credentials', data)
     } catch (error) {
+      setLoading(false)
       if (error instanceof AuthError) {
         switch (error.type) {
           case 'CredentialsSignin':
@@ -68,6 +71,8 @@ export default function LoginForm() {
           value={formik.values.password}
           sufix={
             <IconButton
+              title="Ver senha"
+              aria-label="Ver senha"
               type="button"
               onClick={() => setSeePassword(!seePassword)}
               icon={seePassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -85,7 +90,7 @@ export default function LoginForm() {
       </div>
       <div className="text-end">
         <Button size="xs" type="submit">
-          Entrar
+          {loading ? 'Entrando...' : 'Entrar'}
         </Button>
       </div>
     </form>

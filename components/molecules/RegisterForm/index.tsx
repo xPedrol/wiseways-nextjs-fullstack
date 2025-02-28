@@ -1,5 +1,6 @@
 'use client'
 import Fieldset from '@/components/atoms/Fieldset'
+import IconButton from '@/components/atoms/IconButton'
 import Input from '@/components/atoms/Input'
 import Label from '@/components/atoms/Label'
 import { Eye, EyeOff } from 'lucide-react'
@@ -24,19 +25,13 @@ export default function RegisterForm() {
           type={seePassword ? 'text' : 'password'}
           placeholder="Digite sua senha..."
           sufix={
-            seePassword ? (
-              <EyeOff
-                size={16}
-                className="cursor-pointer"
-                onClick={() => setSeePassword(!seePassword)}
-              />
-            ) : (
-              <Eye
-                size={16}
-                className="cursor-pointer"
-                onClick={() => setSeePassword(!seePassword)}
-              />
-            )
+            <IconButton
+              title="Ver senha"
+              aria-label="Ver senha"
+              type="button"
+              onClick={() => setSeePassword(!seePassword)}
+              icon={seePassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            />
           }
         />
       </Fieldset>

@@ -7,11 +7,12 @@ export default function IconButton({
   icon,
   ...rest
 }: ButtonProps) {
-  const buttonClass = tSize === 'md' ? 'right-2 top-2' : 'right-1 top-1'
+  const buttonClass =
+    tSize === 'md' ? 'right-2 top-[8px] h-8 w-8' : 'right-1 top-[4px] h-7 w-7'
   return (
     <button
       {...rest}
-      className={`${buttonClass} absolute h-8 w-8 my-auto px-2 flex items-center bg-primary-a0 rounded-lg`}
+      className={`${buttonClass} absolute my-auto px-2 flex items-center bg-primary-a0 rounded-lg`}
     >
       {icon}
     </button>

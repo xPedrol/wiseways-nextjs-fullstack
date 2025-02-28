@@ -4,7 +4,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   tSize?: 'sm' | 'md'
 }
 export default function Input({ sufix, tSize = 'md', ...rest }: InputProps) {
-  let inputClass = tSize === 'md' ? 'py-3 text-md' : 'py-2 text-sm'
+  let inputClass = tSize === 'md' ? 'text-md h-12' : 'text-sm h-9'
   inputClass += sufix ? ' pr-11' : ' pr-3'
   return (
     <div className="relative">
