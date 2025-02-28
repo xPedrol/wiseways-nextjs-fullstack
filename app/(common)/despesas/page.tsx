@@ -1,3 +1,4 @@
+import IconButton from '@/components/atoms/IconButton'
 import Input from '@/components/atoms/Input'
 import { Pagination } from '@/components/atoms/Pagination'
 import { BarChart, Search, TrendingDown, TrendingUp } from 'lucide-react'
@@ -45,7 +46,13 @@ export default async function Expenses() {
           <Input
             placeholder="Pesquise por um registro..."
             tSize="sm"
-            sufix={<Search />}
+            sufix={
+              <IconButton
+                tSize="sm"
+                type="button"
+                icon={<Search size={16} />}
+              />
+            }
           />
         </div>
       </div>

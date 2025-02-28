@@ -21,10 +21,14 @@ export default async function NewExpense() {
       </div>
       <div>
         <form className="flex gap-2 flex-col">
-          <div className="flex flex-row flex-wrap gap-2">
+          <div className="flex flex-row flex-wrap gap-2 max-md:flex-col">
             <Fieldset className="flex-1">
               <Label>Valor</Label>
-              <Input type="text" placeholder="Digite o valor..." />
+              <Input
+                className="min-w-[350px]"
+                type="text"
+                placeholder="Digite o valor..."
+              />
             </Fieldset>
             <Fieldset className="flex-1">
               <Label>Data</Label>

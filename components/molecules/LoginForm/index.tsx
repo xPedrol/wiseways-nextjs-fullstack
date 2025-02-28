@@ -2,6 +2,7 @@
 import Button from '@/components/atoms/Button'
 import ErrorLabel from '@/components/atoms/ErrorLabel'
 import Fieldset from '@/components/atoms/Fieldset'
+import IconButton from '@/components/atoms/IconButton'
 import Input from '@/components/atoms/Input'
 import Label from '@/components/atoms/Label'
 import { TLogin } from '@/types/auth'
@@ -66,19 +67,11 @@ export default function LoginForm() {
           onBlur={formik.handleBlur}
           value={formik.values.password}
           sufix={
-            seePassword ? (
-              <EyeOff
-                size={16}
-                className="cursor-pointer"
-                onClick={() => setSeePassword(!seePassword)}
-              />
-            ) : (
-              <Eye
-                size={16}
-                className="cursor-pointer"
-                onClick={() => setSeePassword(!seePassword)}
-              />
-            )
+            <IconButton
+              type="button"
+              onClick={() => setSeePassword(!seePassword)}
+              icon={seePassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            />
           }
         />
         {formik.touched.password && formik.errors.password && (
