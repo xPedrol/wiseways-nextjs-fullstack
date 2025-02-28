@@ -20,6 +20,8 @@ export function Pagination() {
   return (
     <div className="flex items-center gap-4 max-md:text-xl">
       <button
+        title="Página anterior"
+        aria-label="Página anterior"
         onClick={prev}
         disabled={active === 1}
         className="border rounded-lg p-1"
@@ -30,6 +32,8 @@ export function Pagination() {
         Página <strong>{active}</strong> de <strong>10</strong>
       </p>
       <button
+        title="Próxima página"
+        aria-label="Próxima página"
         onClick={next}
         disabled={active === 10}
         className="border rounded-lg p-1"

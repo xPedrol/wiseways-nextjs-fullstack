@@ -46,7 +46,11 @@ export default function Sidebar() {
         <Link href={'/'} className="flex items-center">
           <h1 className="uppercase text-2xl font-[1000]">Wise Ways</h1>
         </Link>
-        <button onClick={closeSidebar}>
+        <button
+          onClick={closeSidebar}
+          title="Fechar Sidebar"
+          aria-label="Fechar Sidebar"
+        >
           <X size={28} />
         </button>
       </div>

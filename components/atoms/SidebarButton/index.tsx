@@ -7,7 +7,11 @@ export default function SidebarButton() {
     if (sidebar) sidebar.classList.toggle('translate-x-[500px]')
   }
   return (
-    <button onClick={openSidebar}>
+    <button
+      onClick={openSidebar}
+      title="Abrir/Fechar Sidebar"
+      aria-label="Abrir/Fechar Sidebar"
+    >
       <Menu size={28} />
     </button>
   )

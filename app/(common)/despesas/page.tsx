@@ -48,6 +48,8 @@ export default async function Expenses() {
             tSize="sm"
             sufix={
               <IconButton
+                title="Buscar registro"
+                aria-label="Buscar registro"
                 tSize="sm"
                 type="button"
                 icon={<Search size={16} />}
