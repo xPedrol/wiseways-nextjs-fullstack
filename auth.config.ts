@@ -1,5 +1,5 @@
 import type { NextAuthConfig } from 'next-auth'
-const authPages = ['/', 'perfil']
+const authPages = ['/', 'perfil', '/despesas', '/cadastrar-despesa']
 const justNoAuthPages = ['/entrar', '/cadastrar']
 export const authConfig = {
   pages: {
