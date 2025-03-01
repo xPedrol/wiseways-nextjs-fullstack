@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
         hostname: 'docs.gravatar.com',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.jsdelivr.net',
+        port: '',
+      },
     ],
   },
 }

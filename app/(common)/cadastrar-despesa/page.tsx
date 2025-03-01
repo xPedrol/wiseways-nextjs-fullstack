@@ -15,7 +15,7 @@ export default async function NewExpense() {
     <div className="custom-contaier">
       <div className="w-full flex max-md:flex-col max-md:items-stretch justify-between items-center mb-3 gap-2">
         <div>
-          <h3 className="text-lg font-semibold ">Nova Despesa</h3>
+          <h1 className="text-lg font-semibold ">Nova Despesa</h1>
           <p className="">Fevereiro de 2025</p>
         </div>
       </div>

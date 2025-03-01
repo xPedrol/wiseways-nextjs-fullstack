@@ -37,9 +37,9 @@ export default async function Expenses() {
       </div>
       <div className="w-full flex max-md:flex-col max-md:items-stretch justify-between items-center mb-3 gap-2">
         <div>
-          <h3 className="text-lg font-semibold ">
+          <h2 className="text-lg font-semibold ">
             Despesas e ganhos cadastrados
-          </h3>
+          </h2>
           <p className="">Fevereiro de 2025</p>
         </div>
         <div className="w-full max-md:max-w-full max-w-[400px] relative">

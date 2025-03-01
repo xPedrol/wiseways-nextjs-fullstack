@@ -1,4 +1,10 @@
 'use client'
+import { useFormik } from 'formik'
+import { Eye, EyeOff } from 'lucide-react'
+import { AuthError } from 'next-auth'
+import { signIn } from 'next-auth/react'
+import Link from 'next/link'
+import { useState } from 'react'
 import Button from '@/components/atoms/Button'
 import ErrorLabel from '@/components/atoms/ErrorLabel'
 import Fieldset from '@/components/atoms/Fieldset'
@@ -6,17 +12,8 @@ import IconButton from '@/components/atoms/IconButton'
 import Input from '@/components/atoms/Input'
 import Label from '@/components/atoms/Label'
 import { TLogin } from '@/types/auth'
-import { useFormik } from 'formik'
-import { Eye, EyeOff } from 'lucide-react'
-import { AuthError } from 'next-auth'
-import { signIn } from 'next-auth/react'
-import Link from 'next/link'
-import { useState } from 'react'
-import { object, string } from 'yup'
-const userSchema = object({
-  email: string().email('E-mail inválido').required('E-mail obrigatório'),
-  password: string().required('Senha obrigatória'),
-})
+import { loginValidation } from '@/yupSchemas/user'
+
 export default function LoginForm() {
   const [loading, setLoading] = useState(false)
   const submitMethod = async (data: TLogin) => {
@@ -42,7 +39,7 @@ export default function LoginForm() {
       password: '',
     },
     onSubmit: submitMethod,
-    validationSchema: userSchema,
+    validationSchema: loginValidation,
   })
   const [seePassword, setSeePassword] = useState<boolean>(false)
   return (
