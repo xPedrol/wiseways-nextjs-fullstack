@@ -1,7 +1,7 @@
-import mongoose, { model, Schema } from 'mongoose'
-import { ExpenseSchema } from './mongModels/expense'
-import { TagSchema } from './mongModels/tag'
-import { UserSchema } from './mongModels/user'
+import mongoose, { model } from 'mongoose'
+import { ExpenseSchema } from './models/expense'
+import { TagSchema } from './models/tag'
+import { UserSchema } from './models/user'
 
 export const Expense =
   mongoose.models.Expenses || model('Expenses', ExpenseSchema)

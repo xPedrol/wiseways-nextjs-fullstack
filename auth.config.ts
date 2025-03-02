@@ -33,12 +33,16 @@ export const authConfig = {
       return true
     },
     async session({ session, user, token }) {
-      if (token && token.id) {
-        session.user.id = String(token.id)
+      if (token) {
+        if (token.id) session.user.id = String(token.id)
+        if (token.image) session.user.image = String(token.image)
       }
       return session
     },
-    async jwt({ token, user, account, profile, isNewUser }) {
+    async jwt({ token, user, session, trigger }) {
+      if (trigger === 'update' && session?.user) {
+        Object.assign(token, session.user)
+      }
       if (user && '_id' in user) {
         token.id = user._id
       }

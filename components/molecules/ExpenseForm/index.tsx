@@ -8,6 +8,8 @@ import Select from '@/components/atoms/Select'
 import SelectOption from '@/components/atoms/SelectOption'
 import Textarea from '@/components/atoms/Textarea'
 import cfetch from '@/config/fetchapi'
+import { TCreateExpense } from '@/interfaces/expense'
+import { TTag } from '@/interfaces/tag'
 import { sendExpenseValidation } from '@/yupSchemas/expense'
 import { useFormik } from 'formik'
 import { useEffect, useState } from 'react'
@@ -15,7 +17,7 @@ import { useEffect, useState } from 'react'
 export default function ExpenseForm() {
   const date = new Date()
   const inputDateValue = date.toISOString().split('T')[0]
-  const [tags, setTags] = useState<any[] | null>(null)
+  const [tags, setTags] = useState<TTag[] | null>(null)
   useEffect(() => {
     const getTags = async () => {
       const res = await cfetch('/tags', {
@@ -26,7 +28,7 @@ export default function ExpenseForm() {
     }
     getTags()
   }, [])
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: TCreateExpense) => {
     try {
       if (!data.tag) data.tag = null
       const response = await cfetch('/expenses', {

@@ -2,7 +2,9 @@ import IconButton from '@/components/atoms/IconButton'
 import Input from '@/components/atoms/Input'
 import { Pagination } from '@/components/atoms/Pagination'
 import cfetch from '@/config/fetchapi'
-import { getMoneyColor } from '@/utils/string'
+import { TExpense } from '@/interfaces/expense'
+import { getEndOfMonth, getStartOfMonth, ptbrMonths } from '@/utils/date'
+import { formatMoney, getMoneyColor } from '@/utils/string'
 import { BarChart, Search, TrendingDown, TrendingUp } from 'lucide-react'
 import { Metadata } from 'next'
 import { headers } from 'next/headers'
@@ -12,69 +14,76 @@ export const metadata: Metadata = {
 const cardStyle =
   'flex-1 bg-surface-a10 px-4 py-2 rounded-lg flex flex-col min-w-[300px]'
 export default async function Expenses() {
-  let expenses = []
-  const date = new Date().toISOString().split('T')[0]
-  const response = await cfetch(`/expenses?date=${date}`, {
+  let expenses: TExpense[] = []
+  const date = new Date()
+  const month = date.getMonth()
+  const year = date.getFullYear()
+  const start = getStartOfMonth(date).toISOString().split('T')[0]
+  const end = getEndOfMonth(date).toISOString().split('T')[0]
+  const response = await cfetch(`/expenses?start=${start}&end=${end}`, {
     method: 'GET',
     headers: await headers(),
   })
   if (response.status === 200) {
     expenses = await response.json()
   }
-  const summaryResponse = await cfetch(`/expenses/summary?date=${date}`, {
-    method: 'GET',
-    headers: await headers(),
-  })
-  let summary = null
+  const summaryResponse = await cfetch(
+    `/expenses/summary?start=${start}&end=${end}`,
+    {
+      method: 'GET',
+      headers: await headers(),
+    },
+  )
+  const summary = {
+    gain: 0,
+    loss: 0,
+    total: 0,
+  }
   if (summaryResponse.status === 200) {
-    summary = await summaryResponse.json()
+    Object.assign(summary, await summaryResponse.json())
   }
   return (
     <div className="custom-contaier">
-      {summary && (
-        <div className="flex content-between flex-wrap gap-4 mb-10">
-          <div className={cardStyle}>
-            <TrendingUp size={32} stroke="#ab82d0" />
-            <h1>Ganhos</h1>
-            <p
-              className={`font-bold text-2xl text-${getMoneyColor(
-                summary.gain,
-              )}`}
-            >
-              {summary.gain}
-            </p>
-          </div>
-          <div className={cardStyle}>
-            <TrendingDown size={32} stroke="#ab82d0" />
-            <h1>Despesas</h1>
-            <p
-              className={`font-bold text-2xl text-${getMoneyColor(
-                summary.loss,
-              )}`}
-            >
-              {summary.loss}
-            </p>
-          </div>
-          <div className={cardStyle}>
-            <BarChart size={32} stroke="#ab82d0" />
-            <h1>Total</h1>
-            <p
-              className={`font-bold text-2xl text-${getMoneyColor(
-                summary.total,
-              )}`}
-            >
-              {summary.total}
-            </p>
-          </div>
+      <div className="flex content-between flex-wrap gap-4 mb-10">
+        <div className={cardStyle}>
+          <TrendingUp size={32} stroke="#ab82d0" />
+          <h1>Ganhos</h1>
+          <p
+            className={`font-bold text-2xl text-${getMoneyColor(summary.gain)}`}
+          >
+            {formatMoney(summary.gain)}
+          </p>
         </div>
-      )}
+        <div className={cardStyle}>
+          <TrendingDown size={32} stroke="#ab82d0" />
+          <h1>Despesas</h1>
+          <p
+            className={`font-bold text-2xl text-${getMoneyColor(summary.loss)}`}
+          >
+            {formatMoney(summary.loss)}
+          </p>
+        </div>
+        <div className={cardStyle}>
+          <BarChart size={32} stroke="#ab82d0" />
+          <h1>Total</h1>
+          <p
+            className={`font-bold text-2xl text-${getMoneyColor(
+              summary.total,
+            )}`}
+          >
+            {formatMoney(summary.total)}
+          </p>
+        </div>
+      </div>
 
       <div className="w-full flex max-md:flex-col max-md:items-stretch justify-between items-center mb-3 gap-2">
         <div>
           <h2 className="text-lg font-semibold ">
             Despesas e ganhos cadastrados
           </h2>
-          <p className="">Fevereiro de 2025</p>
+          <p className="">
+            {ptbrMonths[month]} de {year}
+          </p>
         </div>
         <div className="w-full max-md:max-w-full max-w-[400px] relative">
           <Input
@@ -119,7 +128,7 @@ export default async function Expenses() {
               </tr>
             </thead>
             <tbody>
-              {expenses.map((expense: any) => (
+              {expenses.map((expense) => (
                 <tr key={expense._id} className="hover:bg-primary-a10">
                   <td className="p-4 py-5">
                     <p
@@ -127,11 +136,11 @@ export default async function Expenses() {
                         expense.value,
                       )}`}
                     >
-                      {expense.value}
+                      {formatMoney(expense.value)}
                     </p>
                   </td>
                   <td className="p-4 py-5">
-                    <p className="text-sm ">{expense.tag.name}</p>
+                    <p className="text-sm ">{expense?.tag?.name ?? '--'}</p>
                   </td>
                   <td className="p-4 py-5">
                     <p className="text-sm ">

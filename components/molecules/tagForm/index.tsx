@@ -6,11 +6,12 @@ import Input from '@/components/atoms/Input'
 import Label from '@/components/atoms/Label'
 import Textarea from '@/components/atoms/Textarea'
 import cfetch from '@/config/fetchapi'
+import { TTag } from '@/interfaces/tag'
 import { sendTagValidation } from '@/yupSchemas/tag'
 import { useFormik } from 'formik'
 
 export default function TagForm() {
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: TTag) => {
     try {
       const response = await cfetch('/tags', {
         method: 'POST',

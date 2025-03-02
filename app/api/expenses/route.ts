@@ -1,7 +1,7 @@
 import { auth } from '@/auth'
 import { connectDB } from '@/config/db'
 import { Expense } from '@/schemas'
-import { getEndOfMonth, getStartOfMonth } from '@/utils/date'
+import { isValidDate } from '@/utils/date'
 import { createExpenseValidation } from '@/yupSchemas/expense'
 import { ValidationError } from 'yup'
 
@@ -39,16 +39,15 @@ export async function GET(request: Request) {
       return Response.json({ message: 'Unauthorized' }, { status: 401 })
     }
     const { searchParams } = new URL(request.url)
-    const date = searchParams.get('date')
-    if (!date || isNaN(Date.parse(date))) {
-      return Response.json({ message: 'Invalid date' }, { status: 400 })
-    }
+    const start = isValidDate(searchParams.get('start')) ?? new Date()
+    const end = isValidDate(searchParams.get('end')) ?? new Date()
+
     await connectDB()
     const expenses = await Expense.find({
       user: session.user.id,
       date: {
-        $gte: getStartOfMonth(date),
-        $lte: getEndOfMonth(date),
+        $gte: start,
+        $lte: end,
       },
     }).populate('tag')
     return Response.json(expenses)

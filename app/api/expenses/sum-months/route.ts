@@ -1,6 +1,6 @@
 import { auth } from '@/auth'
 import { connectDB } from '@/config/db'
-import { getSummary } from '@/modelsUtils/expense'
+import { getSumByMonths } from '@/modelsUtils/expense'
 import { isValidDate } from '@/utils/date'
 
 export async function GET(request: Request) {
@@ -14,20 +14,12 @@ export async function GET(request: Request) {
     const start = isValidDate(searchParams.get('start')) ?? new Date()
     const end = isValidDate(searchParams.get('end')) ?? new Date()
     await connectDB()
-    const lossResult = await getSummary(start, end, session.user.id, {
-      $lt: 0,
+    const result = await getSumByMonths(start, end, session.user.id)
+    const months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    result.forEach((valor) => {
+      months[valor.month] = valor.total
     })
-    const gainResult = await getSummary(start, end, session.user.id, {
-      $gt: 0,
-    })
-    const loss = lossResult.length > 0 ? lossResult[0].total : 0
-    const gain = gainResult.length > 0 ? gainResult[0].total : 0
-    const result = {
-      loss,
-      gain,
-      total: gain + loss,
-    }
-    return Response.json(result)
+    return Response.json(months)
   } catch (error) {
     return Response.json(error, { status: 500 })
   }

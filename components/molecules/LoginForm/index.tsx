@@ -22,15 +22,12 @@ export default function LoginForm() {
       await signIn('credentials', data)
     } catch (error) {
       setLoading(false)
+      let errorMessage = 'Erro desconhecido. Favor tentar mais tarde.'
       if (error instanceof AuthError) {
-        switch (error.type) {
-          case 'CredentialsSignin':
-            return 'Credenciais inválidas.'
-          default:
-            return 'Erro desconhecido. Favor tentar mais tarde.'
-        }
+        if (error.type === 'CredentialsSignin')
+          errorMessage = 'Credenciais inválidas.'
       }
-      throw error
+      alert(errorMessage)
     }
   }
   const formik = useFormik<TLogin>({

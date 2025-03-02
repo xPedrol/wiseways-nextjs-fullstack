@@ -8,11 +8,14 @@ import { createUserValidation } from '@/yupSchemas/user'
 import Image from 'next/image'
 import ErrorLabel from '@/components/atoms/ErrorLabel'
 import cfetch from '@/config/fetchapi'
-import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
 import { TUser } from '@/interfaces/user'
-export default function UserForm() {
-  const { data: session } = useSession()
+import { Session } from 'next-auth'
+import { useSession } from 'next-auth/react'
+type Props = {
+  session: Session
+}
+export default function UserForm({ session }: Props) {
+  const { update } = useSession()
   const onSubmit = async (data: TUser) => {
     if (!session) return
     const response = await cfetch('/users', {
@@ -20,41 +23,42 @@ export default function UserForm() {
       body: JSON.stringify(data),
     })
     if (response.status === 200) {
+      update({
+        user: {
+          ...session.user,
+          ...data,
+        },
+      })
       alert('Dados alterados com sucesso!')
+    } else {
+      alert('Erro ao alterar os dados!')
     }
   }
   const formik = useFormik<TUser>({
     initialValues: {
-      name: '',
-      email: '',
-      image: '',
+      name: session?.user?.name ?? '',
+      email: session?.user?.email ?? '',
+      image: session?.user?.image ?? '',
       password: '',
     },
     onSubmit,
     validationSchema: createUserValidation,
   })
-  useEffect(() => {
-    if (session) {
-      formik.setValues({
-        name: session?.user?.name ?? '',
-        email: session?.user?.email ?? '',
-        image: session?.user?.image ?? '',
-        password: '',
-      })
-    }
-  }, [session, formik])
+  console.log(session.user?.image)
   return (
     <form
       className="flex gap-2 flex-col mx-auto max-w-[500px]"
       onSubmit={formik.handleSubmit}
     >
       <Image
+        priority
         className="self-center rounded-full border-4 border-primary-a0"
         alt="avatar"
         width={150}
         height={150}
+        quality={100}
         src={
-          session?.user?.image ??
+          session.user?.image ??
           'https://docs.gravatar.com/wp-content/uploads/2025/02/avatar-mysteryperson-20250210-256.png'
         }
       />

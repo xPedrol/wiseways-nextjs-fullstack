@@ -10,3 +10,12 @@ export const getMoneyColor = (value: string | number) => {
 export const createObjectId = (value: string) => {
   return new mongoose.Types.ObjectId(value)
 }
+
+export const formatMoney = (value: number | string) => {
+  if (typeof value === 'string') value = Number(value)
+  if (isNaN(value)) value = 0
+  return value.toLocaleString('pt-br', {
+    style: 'currency',
+    currency: 'BRL',
+  })
+}
