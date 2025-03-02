@@ -20,9 +20,10 @@ export default async function Expenses() {
   const year = date.getFullYear()
   const start = getStartOfMonth(date).toISOString().split('T')[0]
   const end = getEndOfMonth(date).toISOString().split('T')[0]
+  const savedHeaders = new Headers(await headers())
   const response = await cfetch(`/expenses?start=${start}&end=${end}`, {
     method: 'GET',
-    headers: await headers(),
+    headers: savedHeaders,
   })
   if (response.status === 200) {
     expenses = await response.json()
@@ -31,7 +32,7 @@ export default async function Expenses() {
     `/expenses/summary?start=${start}&end=${end}`,
     {
       method: 'GET',
-      headers: await headers(),
+      headers: savedHeaders,
     },
   )
   const summary = {

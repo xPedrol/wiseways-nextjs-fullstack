@@ -15,12 +15,12 @@ export default async function Home() {
   const date = new Date()
   const start = getStartOfYear(date).toISOString().split('T')[0]
   const end = getEndOfYear(date).toISOString().split('T')[0]
-
+  const savedHeaders = new Headers(await headers())
   const summaryResponse = await cfetch(
     `/expenses/summary?start=${start}&end=${end}`,
     {
       method: 'GET',
-      headers: await headers(),
+      headers: savedHeaders,
     },
   )
   const summary = {
@@ -36,7 +36,7 @@ export default async function Home() {
     `/expenses/sum-months?start=${start}&end=${end}`,
     {
       method: 'GET',
-      headers: await headers(),
+      headers: savedHeaders,
     },
   )
   let sumByMonths = []
