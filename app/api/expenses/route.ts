@@ -15,11 +15,11 @@ export async function POST(request: Request) {
     if (!('date' in body)) {
       body = { ...body, date: new Date() }
     }
+    body.user = session.user.id
     createExpenseValidation.validate(body, {
       abortEarly: false,
       disableStackTrace: true,
     })
-    body.user = session.user.id
     await connectDB()
     const expense = await Expense.create(body)
     return Response.json(expense)
