@@ -22,6 +22,7 @@ export async function POST(request: Request) {
       return Response.json({ message: 'Unauthorized' }, { status: 401 })
     }
     const body = await request.json()
+    body.user = session.user.id
     await createTagValidation.validate(body, {
       abortEarly: false,
       disableStackTrace: true,
@@ -29,7 +30,6 @@ export async function POST(request: Request) {
     if (!('color' in body)) {
       body.color = faker.color.rgb()
     }
-    body.user = session.user.id
     await connectDB()
     const tag = await Tag.create(body)
     return Response.json(tag)

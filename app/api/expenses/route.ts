@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       body = { ...body, date: new Date() }
     }
     body.user = session.user.id
-    createExpenseValidation.validate(body, {
+    await createExpenseValidation.validate(body, {
       abortEarly: false,
       disableStackTrace: true,
     })
