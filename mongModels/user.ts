@@ -1,7 +1,6 @@
-import mongoose from 'mongoose'
-const { Schema, model } = mongoose
+import { Schema } from 'mongoose'
 
-const UserSchema = new Schema({
+export const UserSchema = new Schema({
   name: String,
   email: String,
   image: String,
@@ -9,6 +8,3 @@ const UserSchema = new Schema({
   createdAt: Date,
   updatedAt: Date,
 })
-
-const User = mongoose.models.Users || model('Users', UserSchema)
-export default User

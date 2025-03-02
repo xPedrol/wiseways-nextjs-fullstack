@@ -21,6 +21,7 @@ export default {
         'surface-a20': 'var(--clr-surface-a20)',
         'surface-a40': 'var(--clr-surface-a40)',
         'surface-a30': 'var(--clr-surface-a30)',
+        'light-a0': 'var(--clr-light-a0)',
       },
       fontFamily: {
         'roboto-condensed': 'var(--font-roboto_condensed)',

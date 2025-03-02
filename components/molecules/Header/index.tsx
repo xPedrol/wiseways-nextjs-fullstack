@@ -32,6 +32,14 @@ export async function Header() {
               Cadastrar Despesa
             </Link>
           </li>
+          <li className="flex">
+            <Link
+              href={'/cadastrar-tag'}
+              className="flex items-center hover:text-primary-a20 hover:scale-95"
+            >
+              Cadastrar Tag
+            </Link>
+          </li>
 
           {!session || !session.user ? (
             <>

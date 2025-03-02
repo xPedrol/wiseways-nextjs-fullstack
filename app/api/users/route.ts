@@ -1,6 +1,6 @@
 import { auth } from '@/auth'
 import { connectDB } from '@/config/db'
-import User from '@/mongModels/user'
+import { User } from '@/schemas'
 import { createUserValidation } from '@/yupSchemas/user'
 import { faker } from '@faker-js/faker'
 import { ValidationError } from 'yup'

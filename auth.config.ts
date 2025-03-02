@@ -32,6 +32,18 @@ export const authConfig = {
       }
       return true
     },
+    async session({ session, user, token }) {
+      if (token && token.id) {
+        session.user.id = String(token.id)
+      }
+      return session
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      if (user && '_id' in user) {
+        token.id = user._id
+      }
+      return token
+    },
   },
   providers: [],
 } satisfies NextAuthConfig

@@ -1,21 +1,18 @@
-import mongoose, { model, Schema } from 'mongoose'
-import { ref } from 'yup'
+import { Schema } from 'mongoose'
 
-const ExpenseSchema = new Schema({
+export const ExpenseSchema = new Schema({
   description: String,
   value: Number,
   date: Date,
-  tagId: {
+  tag: {
     type: Schema.Types.ObjectId,
     ref: 'Tags',
+    required: false,
   },
-  userId: {
+  user: {
     type: Schema.Types.ObjectId,
     ref: 'Users',
   },
   createdAt: Date,
   updatedAt: Date,
 })
-
-const Expense = mongoose.models.Expenses || model('Expenses', ExpenseSchema)
-export default Expense

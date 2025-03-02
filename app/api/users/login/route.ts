@@ -1,5 +1,5 @@
 import { connectDB } from '@/config/db'
-import User from '@/mongModels/user'
+import { User } from '@/schemas'
 import { loginValidation } from '@/yupSchemas/user'
 import { ValidationError } from 'yup'
 

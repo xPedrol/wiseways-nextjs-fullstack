@@ -58,7 +58,7 @@ export default function Sidebar() {
         <ul className="flex flex-col text-xl gap-4">
           <CommonLi href="/despesas" title="Gastos do mês" />
           <CommonLi href="/cadastrar-despesa" title="Cadastrar Despesa" />
-
+          <CommonLi href="/cadastrar-tag" title="Cadastrar Tag" />
           {!session || !session.user ? (
             <>
               <CommonLi href="/entrar" title="Entrar" />

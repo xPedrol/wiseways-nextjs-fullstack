@@ -15,7 +15,6 @@ export default function UserForm() {
   const { data: session } = useSession()
   const onSubmit = async (data: TUser) => {
     if (!session) return
-    debugger
     const response = await cfetch('/users', {
       method: 'PUT',
       body: JSON.stringify(data),

@@ -1,8 +1,14 @@
 import * as Yup from 'yup'
 
+export const sendTagValidation = Yup.object({
+  name: Yup.string()
+    .required('O Nome é obrigatório')
+    .min(3, 'O nome deve ter no mínimo 3 caracteres'),
+  description: Yup.string()
+    .optional()
+    .min(3, 'A descrição deve ter no mínimo 3 caracteres'),
+})
 export const createTagValidation = Yup.object({
-  name: Yup.string().required('O Nome é obrigatório'),
-  color: Yup.string().required('A cor é obrigatória'),
-  description: Yup.string().optional(),
-  userId: Yup.string().required('O usuário é obrigatório'),
+  ...sendTagValidation.fields,
+  color: Yup.string().optional(),
 })
