@@ -1,12 +1,10 @@
 import ExpenseActions from '@/components/atoms/ExpenseActions'
-import IconButton from '@/components/atoms/IconButton'
-import Input from '@/components/atoms/Input'
-import { Pagination } from '@/components/atoms/Pagination'
+import ExpensesActions from '@/components/atoms/ExpensesActions'
 import cfetch from '@/config/fetchapi'
 import { TExpense } from '@/interfaces/expense'
-import { getEndOfMonth, getStartOfMonth, ptbrMonths } from '@/utils/date'
+import { getDayjs, ptbrMonths } from '@/utils/date'
 import { formatMoney, getMoneyColor } from '@/utils/string'
-import { BarChart, Search, TrendingDown, TrendingUp } from 'lucide-react'
+import { BarChart, TrendingDown, TrendingUp } from 'lucide-react'
 import { Metadata } from 'next'
 import { headers } from 'next/headers'
 export const metadata: Metadata = {
@@ -14,13 +12,18 @@ export const metadata: Metadata = {
 }
 const cardStyle =
   'flex-1 bg-surface-a10 px-4 py-2 rounded-lg flex flex-col min-w-[300px]'
-export default async function Expenses() {
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+export default async function Expenses({ searchParams }: Props) {
+  const params = await searchParams
+  const date = getDayjs()
+  const start = params.start ?? date.startOf('month').utc().format()
+  const end = params.end ?? date.endOf('month').utc().format()
   let expenses: TExpense[] = []
-  const date = new Date()
-  const month = date.getMonth()
-  const year = date.getFullYear()
-  const start = getStartOfMonth(date).toISOString().split('T')[0]
-  const end = getEndOfMonth(date).toISOString().split('T')[0]
+  const searchedDate = getDayjs(String(start))
+  const month = searchedDate.month()
+  const year = searchedDate.year()
   const savedHeaders = new Headers(await headers())
   const response = await cfetch(`/expenses?start=${start}&end=${end}`, {
     method: 'GET',
@@ -80,19 +83,7 @@ export default async function Expenses() {
           </p>
         </div>
         <div className="w-full max-md:max-w-full max-w-[400px] relative">
-          <Input
-            placeholder="Pesquise por um registro..."
-            tSize="sm"
-            sufix={
-              <IconButton
-                title="Buscar registro"
-                aria-label="Buscar registro"
-                tSize="sm"
-                type="button"
-                icon={<Search size={16} />}
-              />
-            }
-          />
+          <ExpensesActions currentDate={searchedDate.format('YYYY-MM')} />
         </div>
       </div>
 
@@ -164,9 +155,9 @@ export default async function Expenses() {
           </div>
         )}
       </div>
-      <div className="flex justify-end w-full max-md:justify-center">
+      {/* <div className="flex justify-end w-full max-md:justify-center">
         <Pagination />
-      </div>
+      </div> */}
     </div>
   )
 }

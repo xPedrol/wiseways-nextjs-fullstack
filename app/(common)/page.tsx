@@ -1,20 +1,19 @@
 import { BarChart1 } from '@/components/molecules/LineChart'
 import cfetch from '@/config/fetchapi'
-import { getEndOfYear, getStartOfYear } from '@/utils/date'
+import { getDayjs } from '@/utils/date'
 import { formatMoney, getMoneyColor } from '@/utils/string'
 import { BarChart, TrendingDown, TrendingUp } from 'lucide-react'
 import { Metadata } from 'next'
 import { headers } from 'next/headers'
-
 export const metadata: Metadata = {
   title: 'Início',
 }
 const cardStyle =
   'flex-1 bg-surface-a10 px-4 py-2 rounded-lg flex flex-col min-w-[300px]'
 export default async function Home() {
-  const date = new Date()
-  const start = getStartOfYear(date).toISOString().split('T')[0]
-  const end = getEndOfYear(date).toISOString().split('T')[0]
+  const date = getDayjs()
+  const start = date.startOf('year').utc().format()
+  const end = date.endOf('year').utc().format()
   const savedHeaders = new Headers(await headers())
   const summaryResponse = await cfetch(
     `/expenses/summary?start=${start}&end=${end}`,
@@ -43,6 +42,7 @@ export default async function Home() {
   if (sumByMonthsResponse.status === 200) {
     sumByMonths = await sumByMonthsResponse.json()
   }
+  console.log(sumByMonths)
   return (
     <div className="custom-contaier">
       <div className="flex content-between flex-wrap gap-4 mb-10">

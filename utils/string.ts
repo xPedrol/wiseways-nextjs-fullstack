@@ -4,7 +4,7 @@ export const getMoneyColor = (value: string | number) => {
   value = Number(value)
   if (value < 0) return 'safe-red-color'
   if (value > 0) return 'safe-green-color'
-  return 'safe-red-color'
+  return 'safe-light-color'
 }
 
 export const createObjectId = (value: string) => {

@@ -10,14 +10,14 @@ import Textarea from '@/components/atoms/Textarea'
 import cfetch from '@/config/fetchapi'
 import { TCreateExpense } from '@/interfaces/expense'
 import { TTag } from '@/interfaces/tag'
+import { getDayjs } from '@/utils/date'
 import { sendExpenseValidation } from '@/yupSchemas/expense'
 import { useFormik } from 'formik'
 import { useEffect, useState } from 'react'
 
 export default function ExpenseForm() {
+  const date = getDayjs()
   const [submitting, setSubmitting] = useState(false)
-  const date = new Date()
-  const inputDateValue = date.toISOString().split('T')[0]
   const [tags, setTags] = useState<TTag[] | null>(null)
   useEffect(() => {
     const getTags = async () => {
@@ -31,6 +31,8 @@ export default function ExpenseForm() {
   }, [])
   const onSubmit = async (data: TCreateExpense) => {
     try {
+      const newDate = getDayjs(data.date)
+      data.date = newDate.utc().format()
       setSubmitting(true)
       if (!data.tag) data.tag = null
       const response = await cfetch('/expenses', {
@@ -50,7 +52,7 @@ export default function ExpenseForm() {
   const formik = useFormik({
     initialValues: {
       value: '',
-      date: inputDateValue,
+      date: date.format('YYYY-MM-DD'),
       tag: '',
       description: '',
     },

@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     const result = await getSumByMonths(start, end, session.user.id)
     const months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     result.forEach((valor) => {
-      months[valor.month] = valor.total
+      months[valor.month - 1] = valor.total
     })
     return Response.json(months)
   } catch (error) {
