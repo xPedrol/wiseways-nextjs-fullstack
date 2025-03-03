@@ -7,12 +7,14 @@ import Label from '@/components/atoms/Label'
 import Textarea from '@/components/atoms/Textarea'
 import cfetch from '@/config/fetchapi'
 import { TCreateTag } from '@/interfaces/tag'
+import { useToast } from '@/providers/toastProvider'
 import { sendTagValidation } from '@/yupSchemas/tag'
 import { useFormik } from 'formik'
 import { useState } from 'react'
 
 export default function TagForm() {
   const [submitting, setSubmitting] = useState(false)
+  const { showToast } = useToast()
   const onSubmit = async (data: TCreateTag) => {
     try {
       setSubmitting(true)
@@ -21,11 +23,13 @@ export default function TagForm() {
         body: JSON.stringify(data),
       })
       if (response.status === 200) {
-        alert('Dados alterados com sucesso!')
+        showToast('Registro cadastrado com sucesso!', 'success')
         formik.resetForm()
+      } else {
+        throw ''
       }
     } catch {
-      alert('Falha ao alterar dados.')
+      showToast('Falha ao cadastrar registro', 'error')
     } finally {
       setSubmitting(false)
     }

@@ -13,9 +13,11 @@ import Input from '@/components/atoms/Input'
 import Label from '@/components/atoms/Label'
 import { TLogin } from '@/types/auth'
 import { loginValidation } from '@/yupSchemas/user'
+import { useToast } from '@/providers/toastProvider'
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false)
+  const { showToast } = useToast()
   const submitMethod = async (data: TLogin) => {
     try {
       setLoading(true)
@@ -26,7 +28,7 @@ export default function LoginForm() {
         if (error.type === 'CredentialsSignin')
           errorMessage = 'Credenciais inválidas.'
       }
-      alert(errorMessage)
+      showToast(errorMessage, 'error')
       setLoading(false)
     }
   }

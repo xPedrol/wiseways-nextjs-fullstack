@@ -10,6 +10,7 @@ import Textarea from '@/components/atoms/Textarea'
 import cfetch from '@/config/fetchapi'
 import { TCreateExpense } from '@/interfaces/expense'
 import { TTag } from '@/interfaces/tag'
+import { useToast } from '@/providers/toastProvider'
 import { getDayjs } from '@/utils/date'
 import { sendExpenseValidation } from '@/yupSchemas/expense'
 import { useFormik } from 'formik'
@@ -19,6 +20,7 @@ export default function ExpenseForm() {
   const date = getDayjs()
   const [submitting, setSubmitting] = useState(false)
   const [tags, setTags] = useState<TTag[] | null>(null)
+  const { showToast } = useToast()
   useEffect(() => {
     const getTags = async () => {
       const res = await cfetch('/tags', {
@@ -29,8 +31,11 @@ export default function ExpenseForm() {
     }
     getTags()
   }, [])
-  const onSubmit = async (data: TCreateExpense) => {
+  const onSubmit = async (formData: TCreateExpense) => {
     try {
+      const data = {
+        ...formData,
+      }
       const newDate = getDayjs(data.date)
       data.date = newDate.utc().format()
       setSubmitting(true)
@@ -40,11 +45,20 @@ export default function ExpenseForm() {
         body: JSON.stringify(data),
       })
       if (response.status === 200) {
-        alert('Dados alterados com sucesso!')
-        formik.resetForm()
+        showToast('Registro cadastrado com sucesso!', 'success')
+        formik.resetForm({
+          values: {
+            value: '',
+            date: date.format('YYYY-MM-DD'),
+            tag: '',
+            description: '',
+          },
+        })
+      } else {
+        throw ''
       }
     } catch {
-      alert('Falha ao alterar dados.')
+      showToast('Falha ao cadastrar registro', 'error')
     } finally {
       setSubmitting(false)
     }

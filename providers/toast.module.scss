@@ -1,0 +1,28 @@
+.container {
+  top: 7rem;
+  right: 2rem;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 0;
+  z-index: 999 !important;
+}
+.toast {
+  &.error {
+    @apply bg-red-500;
+  }
+  &.success {
+    @apply bg-green-500;
+  }
+  &.info {
+    @apply bg-primary-a0;
+  }
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+}

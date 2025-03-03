@@ -12,29 +12,35 @@ import { TUser } from '@/interfaces/user'
 import { Session } from 'next-auth'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { useToast } from '@/providers/toastProvider'
 type Props = {
   session: Session
 }
 export default function UserForm({ session }: Props) {
   const { update } = useSession()
   const router = useRouter()
+  const { showToast } = useToast()
   const onSubmit = async (data: TUser) => {
-    if (!session) return
-    const response = await cfetch('/users', {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    })
-    if (response.status === 200) {
-      update({
-        user: {
-          ...session.user,
-          ...data,
-        },
+    try {
+      if (!session) return
+      const response = await cfetch('/users', {
+        method: 'PUT',
+        body: JSON.stringify(data),
       })
-      alert('Dados alterados com sucesso!')
-      router.refresh()
-    } else {
-      alert('Erro ao alterar os dados!')
+      if (response.status === 200) {
+        update({
+          user: {
+            ...session.user,
+            ...data,
+          },
+        })
+        showToast('Perfil atualizado com sucesso!', 'success')
+        router.refresh()
+      } else {
+        throw ''
+      }
+    } catch {
+      showToast('Erro ao atualizar perfil', 'success')
     }
   }
   const formik = useFormik<TUser>({

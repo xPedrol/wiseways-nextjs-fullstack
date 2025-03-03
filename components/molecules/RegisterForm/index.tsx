@@ -6,6 +6,7 @@ import IconButton from '@/components/atoms/IconButton'
 import Input from '@/components/atoms/Input'
 import Label from '@/components/atoms/Label'
 import cfetch from '@/config/fetchapi'
+import { useToast } from '@/providers/toastProvider'
 import { TRegister } from '@/types/auth'
 import { createUserValidation } from '@/yupSchemas/user'
 import { useFormik } from 'formik'
@@ -17,6 +18,7 @@ import { useState } from 'react'
 export default function RegisterForm() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const { showToast } = useToast()
   const onSubmit = async (data: TRegister) => {
     try {
       setLoading(true)
@@ -27,11 +29,10 @@ export default function RegisterForm() {
       if (response.status === 200) {
         router.push('/entrar')
       } else {
-        alert('Falha ao cadastrar usuário.')
-        setLoading(false)
+        throw ''
       }
-    } catch (error) {
-      alert(JSON.stringify(error))
+    } catch {
+      showToast('Falha ao cadastrar usuário.', 'error')
       setLoading(false)
     }
   }
