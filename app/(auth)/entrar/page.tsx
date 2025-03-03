@@ -1,4 +1,9 @@
 import LoginForm from '@/components/molecules/LoginForm'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Entrar',
+}
 
 export default async function Entrar() {
   return (

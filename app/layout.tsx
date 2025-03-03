@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     default: 'Wiseways',
   },
   description:
-    'Organização financeira simplificada: controle suas contas de forma rápida e prática! Nosso site oferece as ferramentas e recursos necessários para você gerenciar suas finanças com eficiência, planejar gastos, economizar e alcançar seus objetivos financeiros com tranquilidade.',
+    'Organização financeira simplificada: controle suas contas de forma rápida e prática! Nosso site oferece as ferramentas e recursos necessários para você gerenciar suas finanças com eficiência.',
 }
 export default function RootLayout({
   children,

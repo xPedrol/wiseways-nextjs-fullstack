@@ -1,4 +1,8 @@
 import RegisterForm from '@/components/molecules/RegisterForm'
+import { Metadata } from 'next'
+export const metadata: Metadata = {
+  title: 'Cadastrar',
+}
 
 export default async function Cadastrar() {
   return (
