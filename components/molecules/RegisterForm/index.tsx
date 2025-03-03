@@ -27,12 +27,12 @@ export default function RegisterForm() {
       if (response.status === 200) {
         router.push('/entrar')
       } else {
-        setLoading(false)
         alert('Falha ao cadastrar usuário.')
+        setLoading(false)
       }
     } catch (error) {
-      setLoading(false)
       alert(JSON.stringify(error))
+      setLoading(false)
     }
   }
   const formik = useFormik<TRegister>({
@@ -102,7 +102,7 @@ export default function RegisterForm() {
         </p>
       </div>
       <div className="text-end">
-        <Button size="xs" type="submit">
+        <Button disabled={loading} size="xs" type="submit">
           {loading ? 'Cadastrando...' : 'Cadastrar'}
         </Button>
       </div>

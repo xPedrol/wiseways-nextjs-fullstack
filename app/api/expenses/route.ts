@@ -55,3 +55,23 @@ export async function GET(request: Request) {
     return Response.json(error, { status: 500 })
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+    if (!id) {
+      return Response.json({ message: 'Id is required' }, { status: 400 })
+    }
+    await connectDB()
+    const expense = await Expense.deleteOne({
+      _id: id,
+    })
+    if (expense.deletedCount === 0) {
+      return Response.json({ message: 'Expense not found' }, { status: 404 })
+    }
+    return Response.json(expense)
+  } catch (error) {
+    return Response.json(error, { status: 500 })
+  }
+}

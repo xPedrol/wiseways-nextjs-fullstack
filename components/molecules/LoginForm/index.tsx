@@ -21,13 +21,13 @@ export default function LoginForm() {
       setLoading(true)
       await signIn('credentials', data)
     } catch (error) {
-      setLoading(false)
       let errorMessage = 'Erro desconhecido. Favor tentar mais tarde.'
       if (error instanceof AuthError) {
         if (error.type === 'CredentialsSignin')
           errorMessage = 'Credenciais inválidas.'
       }
       alert(errorMessage)
+      setLoading(false)
     }
   }
   const formik = useFormik<TLogin>({
@@ -83,7 +83,7 @@ export default function LoginForm() {
         </p>
       </div>
       <div className="text-end">
-        <Button size="xs" type="submit">
+        <Button disabled={loading} type="submit">
           {loading ? 'Entrando...' : 'Entrar'}
         </Button>
       </div>

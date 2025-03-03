@@ -2,9 +2,9 @@ import mongoose from 'mongoose'
 
 export const getMoneyColor = (value: string | number) => {
   value = Number(value)
-  if (value < 0) return 'red-500'
-  if (value > 0) return 'green-500'
-  return 'light-a0'
+  if (value < 0) return 'safe-red-color'
+  if (value > 0) return 'safe-green-color'
+  return 'safe-red-color'
 }
 
 export const createObjectId = (value: string) => {

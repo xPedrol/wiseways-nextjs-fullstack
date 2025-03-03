@@ -6,13 +6,16 @@ import Input from '@/components/atoms/Input'
 import Label from '@/components/atoms/Label'
 import Textarea from '@/components/atoms/Textarea'
 import cfetch from '@/config/fetchapi'
-import { TTag } from '@/interfaces/tag'
+import { TCreateTag } from '@/interfaces/tag'
 import { sendTagValidation } from '@/yupSchemas/tag'
 import { useFormik } from 'formik'
+import { useState } from 'react'
 
 export default function TagForm() {
-  const onSubmit = async (data: TTag) => {
+  const [submitting, setSubmitting] = useState(false)
+  const onSubmit = async (data: TCreateTag) => {
     try {
+      setSubmitting(true)
       const response = await cfetch('/tags', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -23,6 +26,8 @@ export default function TagForm() {
       }
     } catch {
       alert('Falha ao alterar dados.')
+    } finally {
+      setSubmitting(false)
     }
   }
   const formik = useFormik({
@@ -64,7 +69,9 @@ export default function TagForm() {
         )}
       </Fieldset>
       <div className="text-end">
-        <Button type="submit">Salvar</Button>
+        <Button disabled={submitting} type="submit">
+          {submitting ? 'Enviando...' : 'Enviar'}
+        </Button>
       </div>
     </form>
   )

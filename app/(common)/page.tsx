@@ -49,29 +49,21 @@ export default async function Home() {
         <div className={cardStyle}>
           <TrendingUp size={32} stroke="#ab82d0" />
           <h1>Ganhos</h1>
-          <p
-            className={`font-bold text-2xl text-${getMoneyColor(summary.gain)}`}
-          >
+          <p className={`font-bold text-2xl ${getMoneyColor(summary.gain)}`}>
             {formatMoney(summary.gain)}
           </p>
         </div>
         <div className={cardStyle}>
           <TrendingDown size={32} stroke="#ab82d0" />
           <h1>Despesas</h1>
-          <p
-            className={`font-bold text-2xl text-${getMoneyColor(summary.loss)}`}
-          >
+          <p className={`font-bold text-2xl ${getMoneyColor(summary.loss)}`}>
             {formatMoney(summary.loss)}
           </p>
         </div>
         <div className={cardStyle}>
           <BarChart size={32} stroke="#ab82d0" />
           <h1>Total</h1>
-          <p
-            className={`font-bold text-2xl text-${getMoneyColor(
-              summary.total,
-            )}`}
-          >
+          <p className={`font-bold text-2xl ${getMoneyColor(summary.total)}`}>
             {formatMoney(summary.total)}
           </p>
         </div>

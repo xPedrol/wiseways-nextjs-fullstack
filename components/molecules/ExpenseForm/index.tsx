@@ -15,6 +15,7 @@ import { useFormik } from 'formik'
 import { useEffect, useState } from 'react'
 
 export default function ExpenseForm() {
+  const [submitting, setSubmitting] = useState(false)
   const date = new Date()
   const inputDateValue = date.toISOString().split('T')[0]
   const [tags, setTags] = useState<TTag[] | null>(null)
@@ -24,12 +25,13 @@ export default function ExpenseForm() {
         method: 'GET',
       })
       const data = await res.json()
-      setTags(data)
+      setTags(data.tags)
     }
     getTags()
   }, [])
   const onSubmit = async (data: TCreateExpense) => {
     try {
+      setSubmitting(true)
       if (!data.tag) data.tag = null
       const response = await cfetch('/expenses', {
         method: 'POST',
@@ -41,6 +43,8 @@ export default function ExpenseForm() {
       }
     } catch {
       alert('Falha ao alterar dados.')
+    } finally {
+      setSubmitting(false)
     }
   }
   const formik = useFormik({
@@ -115,7 +119,9 @@ export default function ExpenseForm() {
         />
       </Fieldset>
       <div className="text-end">
-        <Button type="submit">Salvar</Button>
+        <Button disabled={submitting} type="submit">
+          {submitting ? 'Enviando...' : 'Enviar'}
+        </Button>
       </div>
     </form>
   )

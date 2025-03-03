@@ -1,3 +1,4 @@
+import ExpenseActions from '@/components/atoms/ExpenseActions'
 import IconButton from '@/components/atoms/IconButton'
 import Input from '@/components/atoms/Input'
 import { Pagination } from '@/components/atoms/Pagination'
@@ -49,29 +50,21 @@ export default async function Expenses() {
         <div className={cardStyle}>
           <TrendingUp size={32} stroke="#ab82d0" />
           <h1>Ganhos</h1>
-          <p
-            className={`font-bold text-2xl text-${getMoneyColor(summary.gain)}`}
-          >
+          <p className={`font-bold text-2xl ${getMoneyColor(summary.gain)}`}>
             {formatMoney(summary.gain)}
           </p>
         </div>
         <div className={cardStyle}>
           <TrendingDown size={32} stroke="#ab82d0" />
           <h1>Despesas</h1>
-          <p
-            className={`font-bold text-2xl text-${getMoneyColor(summary.loss)}`}
-          >
+          <p className={`font-bold text-2xl ${getMoneyColor(summary.loss)}`}>
             {formatMoney(summary.loss)}
           </p>
         </div>
         <div className={cardStyle}>
           <BarChart size={32} stroke="#ab82d0" />
           <h1>Total</h1>
-          <p
-            className={`font-bold text-2xl text-${getMoneyColor(
-              summary.total,
-            )}`}
-          >
+          <p className={`font-bold text-2xl ${getMoneyColor(summary.total)}`}>
             {formatMoney(summary.total)}
           </p>
         </div>
@@ -108,24 +101,25 @@ export default async function Expenses() {
           <table className="w-full text-left table-auto min-w-max bg-surface-a10 shadow-md bg-clip-border">
             <thead>
               <tr>
-                <th className="p-4  bg-primary-a0">
+                <th className="p-4 bg-primary-a0">
                   <p className="block text-sm font-normal leading-none ">
                     Valor
                   </p>
                 </th>
-                <th className="p-4  bg-primary-a0">
+                <th className="p-4 bg-primary-a0">
                   <p className="block text-sm font-normal leading-none ">Tag</p>
                 </th>
-                <th className="p-4  bg-primary-a0">
+                <th className="p-4 bg-primary-a0">
                   <p className="block text-sm font-normal leading-none ">
                     Data
                   </p>
                 </th>
-                <th className="p-4  bg-primary-a0">
+                <th className="p-4 bg-primary-a0">
                   <p className="block text-sm font-normal leading-none ">
                     Descrição
                   </p>
                 </th>
+                <th className="p-4 bg-primary-a0"></th>
               </tr>
             </thead>
             <tbody>
@@ -133,7 +127,7 @@ export default async function Expenses() {
                 <tr key={expense._id} className="hover:bg-primary-a10">
                   <td className="p-4 py-5">
                     <p
-                      className={`block font-semibold text-sm text-${getMoneyColor(
+                      className={`block font-semibold text-sm ${getMoneyColor(
                         expense.value,
                       )}`}
                     >
@@ -152,6 +146,13 @@ export default async function Expenses() {
                     <p className="text-sm line-clamp-3">
                       {expense.description}
                     </p>
+                  </td>
+                  <td className="p-4 py-5">
+                    {expense?._id && (
+                      <div className="w-full flex justify-end">
+                        <ExpenseActions id={expense._id} />
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))}

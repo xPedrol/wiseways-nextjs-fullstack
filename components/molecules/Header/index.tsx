@@ -21,7 +21,15 @@ export async function Header() {
               href={'/despesas'}
               className="flex items-center hover:text-primary-a20 hover:scale-95"
             >
-              Gastos do mês
+              Despesas
+            </Link>
+          </li>
+          <li className="flex">
+            <Link
+              href={'/tags'}
+              className="flex items-center hover:text-primary-a20 hover:scale-95"
+            >
+              Tags
             </Link>
           </li>
           <li className="flex">

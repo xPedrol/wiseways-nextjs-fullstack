@@ -44,3 +44,13 @@ body {
 .custom-contaier {
   @apply max-w-[1280px] max-xl:mx-4 mx-auto mt-10;
 }
+
+.safe-green-color {
+  @apply text-green-500;
+}
+.safe-red-color {
+  @apply text-red-500;
+}
+.safe-red-color {
+  @apply text-light-a0;
+}
