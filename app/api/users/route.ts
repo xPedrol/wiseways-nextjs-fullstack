@@ -7,6 +7,9 @@ import { ValidationError } from 'yup'
 
 export async function GET() {
   const session = await auth()
+  if (!session || !session?.user?.id) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 })
+  }
   return Response.json(session)
 }
 export async function POST(request: Request) {
@@ -32,7 +35,11 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
+  const session = await auth()
   try {
+    if (!session || !session?.user?.id) {
+      return Response.json({ message: 'Unauthorized' }, { status: 401 })
+    }
     const body = await request.json()
     await createUserValidation.validate(body, {
       abortEarly: false,

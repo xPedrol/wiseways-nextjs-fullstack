@@ -42,7 +42,6 @@ export default async function Home() {
   if (sumByMonthsResponse.status === 200) {
     sumByMonths = await sumByMonthsResponse.json()
   }
-  console.log(sumByMonths)
   return (
     <div className="custom-contaier">
       <div className="flex content-between flex-wrap gap-4 mb-10">

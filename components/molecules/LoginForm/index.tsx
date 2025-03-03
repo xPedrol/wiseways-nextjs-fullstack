@@ -79,7 +79,7 @@ export default function LoginForm() {
       </Fieldset>
       <div className="text-end">
         <p>
-          Ainda não possui uma conta? <Link href="/cadastrar">Clique aqui</Link>
+          <Link href="/cadastrar">Clique aqui para se cadastrar</Link>
         </p>
       </div>
       <div className="text-end">

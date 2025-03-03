@@ -1,6 +1,13 @@
 import type { NextAuthConfig } from 'next-auth'
-const authPages = ['/', 'perfil', '/despesas', '/cadastrar-despesa']
-const apiPages = ['/api/users']
+const authPages = [
+  '/',
+  'perfil',
+  '/despesas',
+  '/tags',
+  '/cadastrar-despesa',
+  '/cadastrar-tag',
+]
+const apiPages = ['/api/despesas', '/api/tags']
 const justNoAuthPages = ['/entrar', '/cadastrar']
 export const authConfig = {
   pages: {
@@ -12,7 +19,7 @@ export const authConfig = {
       let needsAuth = false
       const apiPage = nextUrl.pathname.includes('/api')
       if (apiPage) {
-        needsAuth = apiPages.some((page) => nextUrl.pathname === page)
+        needsAuth = apiPages.some((page) => nextUrl.pathname.startsWith(page))
       } else {
         needsAuth = authPages.some((page) => nextUrl.pathname === page)
       }

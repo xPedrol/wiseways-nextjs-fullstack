@@ -11,11 +11,13 @@ import cfetch from '@/config/fetchapi'
 import { TUser } from '@/interfaces/user'
 import { Session } from 'next-auth'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 type Props = {
   session: Session
 }
 export default function UserForm({ session }: Props) {
   const { update } = useSession()
+  const router = useRouter()
   const onSubmit = async (data: TUser) => {
     if (!session) return
     const response = await cfetch('/users', {
@@ -30,6 +32,7 @@ export default function UserForm({ session }: Props) {
         },
       })
       alert('Dados alterados com sucesso!')
+      router.refresh()
     } else {
       alert('Erro ao alterar os dados!')
     }
@@ -44,7 +47,6 @@ export default function UserForm({ session }: Props) {
     onSubmit,
     validationSchema: createUserValidation,
   })
-  console.log(session.user?.image)
   return (
     <form
       className="flex gap-2 flex-col mx-auto max-w-[500px]"

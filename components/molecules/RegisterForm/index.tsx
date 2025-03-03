@@ -98,7 +98,7 @@ export default function RegisterForm() {
       </Fieldset>
       <div className="text-end">
         <p>
-          Já possui uma conta? <Link href="/entrar">Clique aqui</Link>.
+          <Link href="/entrar">Clique aqui para entrar</Link>
         </p>
       </div>
       <div className="text-end">

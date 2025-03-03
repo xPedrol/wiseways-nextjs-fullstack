@@ -11,7 +11,6 @@ export default function ExpensesActions({ currentDate }: Props) {
   const router = useRouter()
   const changeDate = (value: string) => {
     if (value === currentDate) return
-    console.log(value)
     const formated = value + '-01'
     const date = getDayjs(formated)
     const start = date.startOf('month').utc().format()
