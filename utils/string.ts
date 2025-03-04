@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { ChangeEvent } from 'react'
 
 export const getMoneyColor = (value: string | number) => {
   value = Number(value)
@@ -20,7 +21,7 @@ export const formatMoney = (value: number | string) => {
   })
 }
 
-export const formatInputMoney = (event: any) => {
+export const formatInputMoney = (event: ChangeEvent<HTMLInputElement>) => {
   const onlyDigits = event.target.value
     .split('')
     .filter((s: any) => /\d/.test(s))
