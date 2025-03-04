@@ -52,7 +52,7 @@ export default function ExpenseForm({ expense }: Props) {
       data.date = newDate.utc().format()
       if (!data.tag) data.tag = null
       data.value = Number(data.value)
-      if (data.type === 'loss') data.value *= -1
+      if (data.pattern === 'loss') data.value *= -1
       const response = await cfetch('/expenses', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -89,7 +89,7 @@ export default function ExpenseForm({ expense }: Props) {
       data.date = newDate.utc().format()
       if (!data.tag) data.tag = null
       data.value = Number(data.value)
-      if (data.type === 'loss') data.value *= -1
+      if (data.pattern === 'loss') data.value *= -1
       const response = await cfetch('/expenses', {
         method: 'PUT',
         body: JSON.stringify(data),

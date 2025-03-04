@@ -14,5 +14,5 @@ export type TCreateExpense = {
   tag: string | null
   date: string
   description: string
-  type?: 'gain' | 'loss'
+  pattern?: 'gain' | 'loss'
 }
