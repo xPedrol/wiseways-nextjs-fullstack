@@ -130,7 +130,7 @@ export default async function Expenses({ searchParams }: Props) {
                   </td>
                   <td className="p-4 py-5">
                     <p className="text-sm ">
-                      {new Date(expense.date).toLocaleDateString()}
+                      {getDayjs(expense.date).format('DD/MM/YYYY')}
                     </p>
                   </td>
                   <td className="p-4 py-5 max-w-[400px]">

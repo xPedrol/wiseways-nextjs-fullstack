@@ -6,6 +6,7 @@ export type TExpense = {
   tag?: TTag | null
   date: Date | string
   description: string
+  user: string
 }
 
 export type TCreateExpense = {

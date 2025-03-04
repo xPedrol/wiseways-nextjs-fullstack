@@ -30,6 +30,7 @@ export default function ExpenseActions({ id }: Props) {
         color="text-light-a0"
         size="sm"
         type="button"
+        onClick={() => router.push(`/cadastrar-despesa?id=${id}`)}
       >
         <PencilLine size={20} />
       </Button>

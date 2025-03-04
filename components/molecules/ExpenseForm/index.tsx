@@ -8,15 +8,19 @@ import Select from '@/components/atoms/Select'
 import SelectOption from '@/components/atoms/SelectOption'
 import Textarea from '@/components/atoms/Textarea'
 import cfetch from '@/config/fetchapi'
-import { TCreateExpense } from '@/interfaces/expense'
+import { TCreateExpense, TExpense } from '@/interfaces/expense'
 import { TTag } from '@/interfaces/tag'
 import { useToast } from '@/providers/toastProvider'
 import { getDayjs } from '@/utils/date'
 import { sendExpenseValidation } from '@/yupSchemas/expense'
+import dayjs from 'dayjs'
 import { useFormik } from 'formik'
 import { useEffect, useState } from 'react'
 
-export default function ExpenseForm() {
+type Props = {
+  expense?: TExpense | null
+}
+export default function ExpenseForm({ expense }: Props) {
   const date = getDayjs()
   const [submitting, setSubmitting] = useState(false)
   const [tags, setTags] = useState<TTag[] | null>(null)
@@ -63,14 +67,41 @@ export default function ExpenseForm() {
       setSubmitting(false)
     }
   }
+  const onSubmitUpdate = async (formData: TCreateExpense) => {
+    try {
+      const data = {
+        ...expense,
+        ...formData,
+      }
+      const newDate = getDayjs(data.date)
+      data.date = newDate.utc().format()
+      setSubmitting(true)
+      if (!data.tag) data.tag = null
+      const response = await cfetch('/expenses', {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      })
+      if (response.status === 200) {
+        showToast('Registro alterado com sucesso!', 'success')
+      } else {
+        throw ''
+      }
+    } catch {
+      showToast('Falha ao alterar registro', 'error')
+    } finally {
+      setSubmitting(false)
+    }
+  }
   const formik = useFormik({
     initialValues: {
-      value: '',
-      date: date.format('YYYY-MM-DD'),
-      tag: '',
-      description: '',
+      value: expense?.value ?? '',
+      date: expense?.date
+        ? dayjs(expense.date).format('YYYY-MM-DD')
+        : date.format('YYYY-MM-DD'),
+      tag: expense?.tag?._id ?? '',
+      description: expense?.description ?? '',
     },
-    onSubmit,
+    onSubmit: expense ? onSubmitUpdate : onSubmit,
     validationSchema: sendExpenseValidation,
   })
   return (

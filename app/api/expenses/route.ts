@@ -32,6 +32,35 @@ export async function POST(request: Request) {
   }
 }
 
+export async function PUT(request: Request) {
+  const session = await auth()
+  try {
+    if (!session || !session?.user?.id) {
+      return Response.json({ message: 'Unauthorized' }, { status: 401 })
+    }
+    const body = await request.json()
+    await createExpenseValidation.validate(body, {
+      abortEarly: false,
+      disableStackTrace: true,
+    })
+    await connectDB()
+    const expense = await Expense.updateOne(
+      {
+        _id: body._id,
+        user: session.user.id,
+      },
+      body,
+    )
+    return Response.json(expense)
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return Response.json({ error }, { status: 400 })
+    } else {
+      return Response.json(error, { status: 500 })
+    }
+  }
+}
+
 export async function GET(request: Request) {
   const session = await auth()
   try {
@@ -39,6 +68,18 @@ export async function GET(request: Request) {
       return Response.json({ message: 'Unauthorized' }, { status: 401 })
     }
     const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+    if (id) {
+      await connectDB()
+      const expense = await Expense.findOne({
+        _id: id,
+        user: session.user.id,
+      }).populate('tag')
+      if (!expense) {
+        return Response.json({ message: 'Expense not found' }, { status: 404 })
+      }
+      return Response.json(expense)
+    }
     const start = isValidDate(searchParams.get('start')) ?? new Date()
     const end = isValidDate(searchParams.get('end')) ?? new Date()
 
