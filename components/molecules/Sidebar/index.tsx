@@ -1,9 +1,8 @@
 'use client'
-import SignOutButton from '@/components/atoms/SignOutButton'
-import { User, X } from 'lucide-react'
-import { useSession } from 'next-auth/react'
+import { Power, User, X } from 'lucide-react'
+import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 type TCommonLi = {
   href?: string
   title: string
@@ -21,7 +20,11 @@ function CommonLi({ href, title, icon }: TCommonLi) {
           {title}
         </Link>
       ) : (
-        <div className="flex items-center w-[100%] px-4 py-5 gap-3 cursor-pointer">
+        <div
+          title="Sair da Aplicação"
+          aria-label="Sair da Aplicação"
+          className="flex items-center w-[100%] px-4 py-5 gap-3 cursor-pointer"
+        >
           {icon ?? icon}
           {title}
         </div>
@@ -35,6 +38,15 @@ export default function Sidebar() {
   const closeSidebar = () => {
     sidebarRef.current?.classList.add('translate-x-[500px]')
   }
+  useEffect(() => {
+    sidebarRef.current?.addEventListener('mouseup', (e) => {
+      if (sidebarRef.current?.contains(e.target as Node)) {
+        if (e.target instanceof HTMLAnchorElement) {
+          closeSidebar()
+        }
+      }
+    })
+  }, [])
   return (
     <div
       ref={sidebarRef}
@@ -56,7 +68,7 @@ export default function Sidebar() {
       </div>
       <div>
         <ul className="flex flex-col text-xl gap-4">
-          <CommonLi href="/despesas" title="Gastos do mês" />
+          <CommonLi href="/despesas" title="Despesas" />
           <CommonLi href="/cadastrar-despesa" title="Cadastrar Despesa" />
           <CommonLi href="/cadastrar-tag" title="Cadastrar Tag" />
           {!session || !session.user ? (
@@ -71,10 +83,17 @@ export default function Sidebar() {
                 title="Ver Perfil"
                 icon={<User size={24} />}
               />
-              <CommonLi
-                title="Sair da Aplicação"
-                icon={<SignOutButton className="" />}
-              />
+              <li
+                onClick={async () => {
+                  await signOut({ redirectTo: '/entrar' })
+                }}
+                className="flex items-stretch border-l-[5px] border-l-primary-a0 hover:bg-primary-a20"
+              >
+                <div className="flex items-center w-[100%] px-4 py-5 gap-3 cursor-pointer">
+                  <Power size={24} />
+                  Sair da aplicação
+                </div>
+              </li>
             </>
           )}
         </ul>
