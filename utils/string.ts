@@ -19,3 +19,17 @@ export const formatMoney = (value: number | string) => {
     currency: 'BRL',
   })
 }
+
+export const formatInputMoney = (event: any) => {
+  const onlyDigits = event.target.value
+    .split('')
+    .filter((s: any) => /\d/.test(s))
+    .join('')
+    .padStart(3, '0')
+  const digitsFloat = onlyDigits.slice(0, -2) + '.' + onlyDigits.slice(-2)
+  return formatMoney(digitsFloat)
+}
+
+export const removeMoneyMask = (value: string) => {
+  return value.slice(2).replace(/\./g, '').replace(/,/g, '.')
+}

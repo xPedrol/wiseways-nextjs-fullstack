@@ -12,10 +12,11 @@ import { TCreateExpense, TExpense } from '@/interfaces/expense'
 import { TTag } from '@/interfaces/tag'
 import { useToast } from '@/providers/toastProvider'
 import { getDayjs } from '@/utils/date'
+import { formatMoney, formatInputMoney, removeMoneyMask } from '@/utils/string'
 import { sendExpenseValidation } from '@/yupSchemas/expense'
 import dayjs from 'dayjs'
 import { useFormik } from 'formik'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 type Props = {
   expense?: TExpense | null
@@ -35,15 +36,23 @@ export default function ExpenseForm({ expense }: Props) {
     }
     getTags()
   }, [])
+  const handleInputMoneyMask = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = formatInputMoney(e)
+    console.log(value)
+    formik.setFieldValue('value', value)
+  }
   const onSubmit = async (formData: TCreateExpense) => {
     try {
+      setSubmitting(true)
       const data = {
         ...formData,
       }
+      data.value = removeMoneyMask(String(data.value))
       const newDate = getDayjs(data.date)
       data.date = newDate.utc().format()
-      setSubmitting(true)
       if (!data.tag) data.tag = null
+      data.value = Number(data.value)
+      if (data.type === 'loss') data.value *= -1
       const response = await cfetch('/expenses', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -56,6 +65,7 @@ export default function ExpenseForm({ expense }: Props) {
             date: date.format('YYYY-MM-DD'),
             tag: '',
             description: '',
+            type: 'loss',
           },
         })
       } else {
@@ -69,14 +79,17 @@ export default function ExpenseForm({ expense }: Props) {
   }
   const onSubmitUpdate = async (formData: TCreateExpense) => {
     try {
+      setSubmitting(true)
       const data = {
         ...expense,
         ...formData,
       }
+      data.value = removeMoneyMask(String(data.value))
       const newDate = getDayjs(data.date)
       data.date = newDate.utc().format()
-      setSubmitting(true)
       if (!data.tag) data.tag = null
+      data.value = Number(data.value)
+      if (data.type === 'loss') data.value *= -1
       const response = await cfetch('/expenses', {
         method: 'PUT',
         body: JSON.stringify(data),
@@ -94,12 +107,13 @@ export default function ExpenseForm({ expense }: Props) {
   }
   const formik = useFormik({
     initialValues: {
-      value: expense?.value ?? '',
+      value: expense?.value ? formatMoney(Math.abs(Number(expense.value))) : '',
       date: expense?.date
         ? dayjs(expense.date).format('YYYY-MM-DD')
         : date.format('YYYY-MM-DD'),
       tag: expense?.tag?._id ?? '',
       description: expense?.description ?? '',
+      type: 'loss',
     },
     onSubmit: expense ? onSubmitUpdate : onSubmit,
     validationSchema: sendExpenseValidation,
@@ -112,7 +126,7 @@ export default function ExpenseForm({ expense }: Props) {
           id="value"
           type="text"
           placeholder="Digite o valor..."
-          onChange={formik.handleChange}
+          onChange={(e) => handleInputMoneyMask(e)}
           onBlur={formik.handleBlur}
           value={formik.values.value}
         />
@@ -120,19 +134,36 @@ export default function ExpenseForm({ expense }: Props) {
           <ErrorLabel>{formik.errors.value}</ErrorLabel>
         )}
       </Fieldset>
-      <Fieldset className="flex-1">
-        <Label>Data</Label>
-        <Input
-          id="date"
-          type="date"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.date}
-        />
-        {formik.touched.date && formik.errors.date && (
-          <ErrorLabel>{formik.errors.date}</ErrorLabel>
-        )}
-      </Fieldset>
+      <div className="flex gap-2 max-md:flex-col">
+        <Fieldset className="flex-1">
+          <Label>Data</Label>
+          <Input
+            id="date"
+            type="date"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.date}
+          />
+          {formik.touched.date && formik.errors.date && (
+            <ErrorLabel>{formik.errors.date}</ErrorLabel>
+          )}
+        </Fieldset>
+        <Fieldset className="flex-1">
+          <Label>Tipo</Label>
+          <Select
+            id="type"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.type}
+          >
+            <SelectOption value="loss">Perda</SelectOption>
+            <SelectOption value="gain">Ganho</SelectOption>
+          </Select>
+          {formik.touched.tag && formik.errors.tag && (
+            <ErrorLabel>{formik.errors.tag}</ErrorLabel>
+          )}
+        </Fieldset>
+      </div>
       <Fieldset className="flex-1">
         <Label>Tag</Label>
         <Select
