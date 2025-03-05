@@ -7,7 +7,7 @@ type TProps = {
 export default function Button({
   children,
   size = 'lg',
-  color = 'bg-primary-a20',
+  color = 'bg-primary-a0',
   ...rest
 }: TProps) {
   let cClass = size !== 'sm' ? 'py-2' : 'py-1'
@@ -18,7 +18,7 @@ export default function Button({
     <button
       {...rest}
       type="submit"
-      className={`px-4 ${cClass}  ${color} rounded-xl text-${size}`}
+      className={`px-4 ${cClass}  ${color} rounded-lg text-${size}`}
     >
       {children}
     </button>

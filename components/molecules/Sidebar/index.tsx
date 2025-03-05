@@ -51,7 +51,7 @@ export default function Sidebar() {
     <div
       ref={sidebarRef}
       id="sidebar"
-      className="z-10 fixed top-0 right-0 h-[100%] w-[100%] max-w-[500px] bg-surface-a10 flex flex-col gap-12 translate-x-[500px]
+      className="z-10 fixed top-0 right-0 h-full w-full max-w-[500px] bg-surface-a10 flex flex-col gap-12 translate-x-[500px]
     transition-transform duration-200 ease-out"
     >
       <div className="flex justify-between items-center py-8 px-4">

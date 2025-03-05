@@ -52,7 +52,7 @@ export default function ExpenseForm({ expense }: Props) {
       data.date = newDate.utc().format()
       if (!data.tag) data.tag = null
       data.value = Number(data.value)
-      if (data.pattern === 'loss') data.value *= -1
+      if (data.pattern === 'loss') data.value = -Math.abs(data.value)
       const response = await cfetch('/expenses', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -65,7 +65,7 @@ export default function ExpenseForm({ expense }: Props) {
             date: date.format('YYYY-MM-DD'),
             tag: '',
             description: '',
-            type: 'loss',
+            pattern: data.value > 0 ? 'gain' : 'loss',
           },
         })
       } else {
@@ -84,12 +84,13 @@ export default function ExpenseForm({ expense }: Props) {
         ...expense,
         ...formData,
       }
+      debugger
       data.value = removeMoneyMask(String(data.value))
       const newDate = getDayjs(data.date)
       data.date = newDate.utc().format()
       if (!data.tag) data.tag = null
       data.value = Number(data.value)
-      if (data.pattern === 'loss') data.value *= -1
+      if (data.pattern === 'loss') data.value = -Math.abs(data.value)
       const response = await cfetch('/expenses', {
         method: 'PUT',
         body: JSON.stringify(data),
@@ -113,8 +114,8 @@ export default function ExpenseForm({ expense }: Props) {
         : date.format('YYYY-MM-DD'),
       tag: expense?.tag?._id ?? '',
       description: expense?.description ?? '',
-      type: 'loss',
-    },
+      pattern: expense?.value && Number(expense.value) > 0 ? 'gain' : 'loss',
+    } satisfies TCreateExpense,
     onSubmit: expense ? onSubmitUpdate : onSubmit,
     validationSchema: sendExpenseValidation,
   })
@@ -151,10 +152,10 @@ export default function ExpenseForm({ expense }: Props) {
         <Fieldset className="flex-1">
           <Label>Tipo</Label>
           <Select
-            id="type"
+            id="pattern"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.type}
+            value={formik.values.pattern}
           >
             <SelectOption value="loss">Perda</SelectOption>
             <SelectOption value="gain">Ganho</SelectOption>

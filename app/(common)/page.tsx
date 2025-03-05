@@ -1,4 +1,4 @@
-import { BarChart1 } from '@/components/molecules/LineChart'
+import HomeChartSection from '@/components/molecules/HomeChartSection'
 import cfetch from '@/config/fetchapi'
 import { getDayjs } from '@/utils/date'
 import { formatMoney, getMoneyColor } from '@/utils/string'
@@ -67,7 +67,7 @@ export default async function Home() {
           </p>
         </div>
       </div>
-      <div>{sumByMonths && <BarChart1 values={sumByMonths} />}</div>
+      <HomeChartSection sumByMonths={sumByMonths} />
     </div>
   )
 }

@@ -12,13 +12,21 @@ export const createObjectId = (value: string) => {
   return new mongoose.Types.ObjectId(value)
 }
 
-export const formatMoney = (value: number | string) => {
+export const formatMoney = (value: number | string, removeCipher = false) => {
   if (typeof value === 'string') value = Number(value)
   if (isNaN(value)) value = 0
-  return value.toLocaleString('pt-br', {
+  const formated = value.toLocaleString('pt-br', {
     style: 'currency',
     currency: 'BRL',
   })
+  if (removeCipher) {
+    // remover apenas R$, mas pode ter sinal de menos
+    if (formated.startsWith('-R$')) {
+      return '-' + formated.slice(3)
+    }
+    return formated.slice(2)
+  }
+  return formated
 }
 
 export const formatInputMoney = (event: ChangeEvent<HTMLInputElement>) => {
