@@ -68,13 +68,7 @@ export const ExpensesByMonthChart = ({ values }: Props) => {
       },
     },
     dataLabels: {
-      formatter: (val: number) => {
-        // Exibe o rótulo apenas se o valor for maior que zero
-        return val !== 0 ? formatMoney(val, true) : ''
-      },
-      style: {
-        fontSize: '10px', // Tamanho da fonte dos rótulos de dados
-      },
+      enabled: false,
     },
     title: {
       text: `Ganhos e Despesas de ${getDayjs().year()}`,
