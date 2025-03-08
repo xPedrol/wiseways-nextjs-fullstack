@@ -1,16 +1,16 @@
 'use client'
 import { getDayjs } from '@/utils/date'
 import { formatMoney } from '@/utils/string'
-import { faker } from '@faker-js/faker'
 import { ApexOptions } from 'apexcharts'
 import Chart from 'react-apexcharts'
 
 type Props = {
   values: number[]
   labels: string[] // Adicione labels para o Treemap
+  colors: string[]
 }
 
-export const ExpensesByTagChart = ({ values, labels }: Props) => {
+export const ExpensesByTagChart = ({ values, labels, colors }: Props) => {
   // Configurações do gráfico
   const options = {
     chart: {
@@ -42,7 +42,7 @@ export const ExpensesByTagChart = ({ values, labels }: Props) => {
       },
     },
     title: {
-      text: `Ganhos e Despesas de ${getDayjs().year()}`,
+      text: `Despesas de ${getDayjs().year()}`,
       align: 'left',
       style: {
         color: '#FFFFFF', // Cor branca para o título
@@ -81,9 +81,7 @@ export const ExpensesByTagChart = ({ values, labels }: Props) => {
               </div>`
       },
     },
-    colors: values.map(() => {
-      return faker.color.rgb()
-    }), // Lista de cores para cada bloco
+    colors, // Lista de cores para cada bloco
   } satisfies ApexOptions
 
   // Dados do gráfico

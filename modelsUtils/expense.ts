@@ -58,3 +58,50 @@ export const getSumByMonths = (start: Date, end: Date, userId: string) => {
     },
   ])
 }
+
+export const getSumByTags = (start: Date, end: Date, userId: string) => {
+  return Expense.aggregate([
+    {
+      $match: {
+        date: { $gte: start, $lte: end },
+        user: createObjectId(userId),
+        // menor q 0
+        value: { $lt: 0 },
+      },
+    },
+    // obter o nome da tag
+    {
+      $lookup: {
+        from: 'tags',
+        localField: 'tag',
+        foreignField: '_id',
+        as: 'tag',
+      },
+    },
+    {
+      $unwind: '$tag',
+    },
+    {
+      $addFields: {
+        name: '$tag.name',
+        color: '$tag.color',
+      },
+    },
+    {
+      $group: {
+        _id: {
+          name: '$name',
+          color: '$color',
+        },
+        total: { $sum: '$value' },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        tag: '$_id',
+        total: 1,
+      },
+    },
+  ])
+}

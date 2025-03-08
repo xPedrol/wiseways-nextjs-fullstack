@@ -1,5 +1,7 @@
 import HomeChartSection from '@/components/molecules/HomeChartSection'
 import cfetch from '@/config/fetchapi'
+import { ExpenseByTag } from '@/types/expense'
+import { getCookie } from '@/utils/cookie'
 import { getDayjs } from '@/utils/date'
 import { formatMoney, getMoneyColor } from '@/utils/string'
 import { BarChart, TrendingDown, TrendingUp } from 'lucide-react'
@@ -31,16 +33,33 @@ export default async function Home() {
     Object.assign(summary, await summaryResponse.json())
   }
 
-  const sumByMonthsResponse = await cfetch(
-    `/expenses/sum-months?start=${start}&end=${end}`,
-    {
-      method: 'GET',
-      headers: savedHeaders,
-    },
-  )
+  const chartType = (await getCookie('chartType')) ?? 'sum'
   let sumByMonths = []
-  if (sumByMonthsResponse.status === 200) {
-    sumByMonths = await sumByMonthsResponse.json()
+  let sumByTags: ExpenseByTag[] = []
+  if (chartType === 'sum') {
+    const sumByMonthsResponse = await cfetch(
+      `/expenses/sum-months?start=${start}&end=${end}`,
+      {
+        method: 'GET',
+        headers: savedHeaders,
+      },
+    )
+
+    if (sumByMonthsResponse.status === 200) {
+      sumByMonths = await sumByMonthsResponse.json()
+    }
+  } else {
+    const sumByTagsResponse = await cfetch(
+      `/expenses/sum-tags?start=${start}&end=${end}`,
+      {
+        method: 'GET',
+        headers: savedHeaders,
+      },
+    )
+
+    if (sumByTagsResponse.status === 200) {
+      sumByTags = await sumByTagsResponse.json()
+    }
   }
   return (
     <div className="custom-contaier">
@@ -67,7 +86,7 @@ export default async function Home() {
           </p>
         </div>
       </div>
-      <HomeChartSection sumByMonths={sumByMonths} />
+      <HomeChartSection sumByTags={sumByTags} sumByMonths={sumByMonths} />
     </div>
   )
 }
