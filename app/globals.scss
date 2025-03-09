@@ -36,24 +36,21 @@
   padding: 0;
   box-sizing: border-box;
 }
-html,
-body {
-  height: 100%;
-}
+
 body {
   color: var(--clr-light-a0);
   background: var(--clr-surface-a0);
   font-family: var(--font-dm-sans);
 }
 .custom-contaier {
-  @apply max-w-[1280px] max-xl:mx-4 mx-auto mt-10;
+  @apply max-w-[1280px] max-xl:mx-4 mx-auto;
 }
 
 .safe-green-color {
-  @apply text-green-500;
+  @apply text-green-300;
 }
 .safe-red-color {
-  @apply text-red-500;
+  @apply text-red-300;
 }
 .safe-light-color {
   @apply text-light-a0;

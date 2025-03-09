@@ -27,7 +27,7 @@ export default async function NewExpense({ searchParams }: Props) {
   const month = date.month()
   const year = date.year()
   return (
-    <div className="custom-contaier">
+    <div className="custom-contaier mt-10">
       <div className="w-full flex max-md:flex-col max-md:items-stretch justify-between items-center mb-3 gap-2">
         <div>
           <h1 className="text-lg font-semibold ">Nova Despesa</h1>

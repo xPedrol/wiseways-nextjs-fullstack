@@ -48,21 +48,17 @@ export default async function Expenses({ searchParams }: Props) {
     Object.assign(summary, await summaryResponse.json())
   }
   return (
-    <div className="custom-contaier">
+    <div className="custom-contaier mt-10">
       <div className="flex content-between flex-wrap gap-4 mb-10">
         <div className={cardStyle}>
           <TrendingUp size={32} stroke="#ab82d0" />
           <h1>Ganhos</h1>
-          <p className={`font-bold text-2xl ${getMoneyColor(summary.gain)}`}>
-            {formatMoney(summary.gain)}
-          </p>
+          <p className={`font-bold text-2xl`}>{formatMoney(summary.gain)}</p>
         </div>
         <div className={cardStyle}>
           <TrendingDown size={32} stroke="#ab82d0" />
           <h1>Despesas</h1>
-          <p className={`font-bold text-2xl ${getMoneyColor(summary.loss)}`}>
-            {formatMoney(summary.loss)}
-          </p>
+          <p className={`font-bold text-2xl`}>{formatMoney(summary.loss)}</p>
         </div>
         <div className={cardStyle}>
           <BarChart size={32} stroke="#ab82d0" />
@@ -117,11 +113,7 @@ export default async function Expenses({ searchParams }: Props) {
               {expenses.map((expense) => (
                 <tr key={expense._id} className="hover:bg-primary-a10">
                   <td className="p-4 py-5">
-                    <p
-                      className={`block font-semibold text-sm ${getMoneyColor(
-                        expense.value,
-                      )}`}
-                    >
+                    <p className={`block font-semibold text-sm`}>
                       {formatMoney(expense.value)}
                     </p>
                   </td>

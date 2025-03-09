@@ -16,6 +16,7 @@ export default {
         'primary-a0': 'var(--clr-primary-a0)',
         'primary-a10': 'var(--clr-primary-a10)',
         'primary-a50': 'var(--clr-primary-a50)',
+        'primary-a30': 'var(--clr-primary-a30)',
         'primary-a20': 'var(--clr-primary-a20)',
         'surface-a0': 'var(--clr-surface-a0)',
         'surface-a20': 'var(--clr-surface-a20)',

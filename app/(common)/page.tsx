@@ -62,21 +62,17 @@ export default async function Home() {
     }
   }
   return (
-    <div className="custom-contaier">
+    <div className="custom-contaier mt-10">
       <div className="flex content-between flex-wrap gap-4 mb-10">
         <div className={cardStyle}>
           <TrendingUp size={32} stroke="#ab82d0" />
           <h1>Ganhos</h1>
-          <p className={`font-bold text-2xl ${getMoneyColor(summary.gain)}`}>
-            {formatMoney(summary.gain)}
-          </p>
+          <p className={`font-bold text-2xl`}>{formatMoney(summary.gain)}</p>
         </div>
         <div className={cardStyle}>
           <TrendingDown size={32} stroke="#ab82d0" />
           <h1>Despesas</h1>
-          <p className={`font-bold text-2xl ${getMoneyColor(summary.loss)}`}>
-            {formatMoney(summary.loss)}
-          </p>
+          <p className={`font-bold text-2xl`}>{formatMoney(summary.loss)}</p>
         </div>
         <div className={cardStyle}>
           <BarChart size={32} stroke="#ab82d0" />

@@ -11,7 +11,8 @@ export default function RootLayout({
     <SessionProvider>
       <Header />
       <Sidebar />
-      <div className="mb-10">{children}</div>
+      <main className="mb-10">{children}</main>
+      {/* <Footer /> */}
     </SessionProvider>
   )
 }
