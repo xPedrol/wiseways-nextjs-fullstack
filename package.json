@@ -12,6 +12,7 @@
     "@faker-js/faker": "^9.5.0",
     "apexcharts": "^4.5.0",
     "bcrypt": "^5.1.1",
+    "cssnano": "^7.0.6",
     "dayjs": "^1.11.13",
     "formik": "^2.4.6",
     "lucide-react": "^0.475.0",
