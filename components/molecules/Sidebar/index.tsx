@@ -66,7 +66,7 @@ export default function Sidebar() {
           <X size={28} />
         </button>
       </div>
-      <div>
+      <div className="overflow-auto">
         <ul className="flex flex-col text-xl gap-4">
           <CommonLi href="/despesas" title="Despesas" />
           <CommonLi href="/cadastrar-despesa" title="Cadastrar Despesa" />
