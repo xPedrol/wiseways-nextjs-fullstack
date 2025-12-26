@@ -17,7 +17,7 @@
     "formik": "^2.4.6",
     "lucide-react": "^0.475.0",
     "mongoose": "^8.11.0",
-    "next": "15.1.7",
+    "next": "15.1.11",
     "next-auth": "^5.0.0-beta.25",
     "react": "^19.0.0",
     "react-apexcharts": "^1.7.0",
