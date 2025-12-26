@@ -1,58 +1,63 @@
-'use client'
-import { useFormik } from 'formik'
-import Button from '@/components/atoms/Button'
-import Fieldset from '@/components/atoms/Fieldset'
-import Input from '@/components/atoms/Input'
-import Label from '@/components/atoms/Label'
-import { createUserValidation } from '@/yupSchemas/user'
-import Image from 'next/image'
-import ErrorLabel from '@/components/atoms/ErrorLabel'
-import cfetch from '@/config/fetchapi'
-import { TUser } from '@/interfaces/user'
-import { Session } from 'next-auth'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useToast } from '@/providers/toastProvider'
+"use client";
+import { useFormik } from "formik";
+import Button from "@/components/atoms/Button";
+import Fieldset from "@/components/atoms/Fieldset";
+import Input from "@/components/atoms/Input";
+import Label from "@/components/atoms/Label";
+import { createUserValidation } from "@/yupSchemas/user";
+import Image from "next/image";
+import ErrorLabel from "@/components/atoms/ErrorLabel";
+import cfetch from "@/config/fetchapi";
+import { TUser } from "@/interfaces/user";
+import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/providers/toastProvider";
 type Props = {
-  session: Session
-}
+  session: Session;
+};
 export default function UserForm({ session }: Props) {
-  const { update } = useSession()
-  const router = useRouter()
-  const { showToast } = useToast()
+  const { data: sessionHook, update } = useSession();
+  const router = useRouter();
+  const { showToast } = useToast();
   const onSubmit = async (data: TUser) => {
     try {
-      if (!session) return
-      const response = await cfetch('/users', {
-        method: 'PUT',
-        body: JSON.stringify(data),
-      })
+      if (!session) return;
+      const token = sessionHook?.jwt ?? session?.jwt;
+      const response = await cfetch(
+        "/users",
+        {
+          method: "PUT",
+          body: JSON.stringify(data),
+        },
+        token
+      );
       if (response.status === 200) {
         update({
           user: {
             ...session.user,
             ...data,
           },
-        })
-        showToast('Perfil atualizado com sucesso!', 'success')
-        router.refresh()
+        });
+        showToast("Perfil atualizado com sucesso!", "success");
+        router.refresh();
       } else {
-        throw ''
+        throw "";
       }
     } catch {
-      showToast('Erro ao atualizar perfil', 'success')
+      showToast("Erro ao atualizar perfil", "success");
     }
-  }
+  };
   const formik = useFormik<TUser>({
     initialValues: {
-      name: session?.user?.name ?? '',
-      email: session?.user?.email ?? '',
-      image: session?.user?.image ?? '',
-      password: '',
+      name: session?.user?.name ?? "",
+      email: session?.user?.email ?? "",
+      image: session?.user?.image ?? "",
+      password: "",
     },
     onSubmit,
     validationSchema: createUserValidation,
-  })
+  });
   return (
     <form
       className="flex gap-2 flex-col mx-auto max-w-[500px]"
@@ -67,7 +72,7 @@ export default function UserForm({ session }: Props) {
         quality={100}
         src={
           session.user?.image ??
-          'https://docs.gravatar.com/wp-content/uploads/2025/02/avatar-mysteryperson-20250210-256.png'
+          "https://docs.gravatar.com/wp-content/uploads/2025/02/avatar-mysteryperson-20250210-256.png"
         }
       />
       <Fieldset className="flex-1">
@@ -126,5 +131,5 @@ export default function UserForm({ session }: Props) {
         <Button>Salvar</Button>
       </div>
     </form>
-  )
+  );
 }

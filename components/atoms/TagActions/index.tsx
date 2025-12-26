@@ -1,25 +1,31 @@
-'use client'
+"use client";
 
-import cfetch from '@/config/fetchapi'
-import Button from '../Button'
-import { useRouter } from 'next/navigation'
-import { PencilLine, Trash } from 'lucide-react'
+import cfetch from "@/config/fetchapi";
+import { useSession } from "next-auth/react";
+import Button from "../Button";
+import { useRouter } from "next/navigation";
+import { PencilLine, Trash } from "lucide-react";
 
 type Props = {
-  id: string
-}
+  id: string;
+};
 export default function TagActions({ id }: Props) {
-  const router = useRouter()
+  const router = useRouter();
+  const { data: session } = useSession();
   const deleteTag = async (tagId: string) => {
-    const response = await cfetch(`/tags?id=${tagId}`, {
-      method: 'DELETE',
-    })
+    const response = await cfetch(
+      `/tags?id=${tagId}`,
+      {
+        method: "DELETE",
+      },
+      session?.jwt
+    );
     if (response.status === 200) {
-      router.refresh()
+      router.refresh();
     } else {
-      alert('Erro ao deletar tag')
+      alert("Erro ao deletar tag");
     }
-  }
+  };
   return (
     <>
       <Button
@@ -42,5 +48,5 @@ export default function TagActions({ id }: Props) {
         <Trash size={20} />
       </Button>
     </>
-  )
+  );
 }

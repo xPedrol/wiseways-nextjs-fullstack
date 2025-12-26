@@ -1,124 +1,138 @@
-'use client'
-import Button from '@/components/atoms/Button'
-import ErrorLabel from '@/components/atoms/ErrorLabel'
-import Fieldset from '@/components/atoms/Fieldset'
-import Input from '@/components/atoms/Input'
-import Label from '@/components/atoms/Label'
-import Select from '@/components/atoms/Select'
-import SelectOption from '@/components/atoms/SelectOption'
-import Textarea from '@/components/atoms/Textarea'
-import cfetch from '@/config/fetchapi'
-import { TCreateExpense, TExpense } from '@/interfaces/expense'
-import { TTag } from '@/interfaces/tag'
-import { useToast } from '@/providers/toastProvider'
-import { getDayjs } from '@/utils/date'
-import { formatMoney, formatInputMoney, removeMoneyMask } from '@/utils/string'
-import { sendExpenseValidation } from '@/yupSchemas/expense'
-import dayjs from 'dayjs'
-import { useFormik } from 'formik'
-import { ChangeEvent, useEffect, useState } from 'react'
+"use client";
+import Button from "@/components/atoms/Button";
+import ErrorLabel from "@/components/atoms/ErrorLabel";
+import Fieldset from "@/components/atoms/Fieldset";
+import Input from "@/components/atoms/Input";
+import Label from "@/components/atoms/Label";
+import Select from "@/components/atoms/Select";
+import SelectOption from "@/components/atoms/SelectOption";
+import Textarea from "@/components/atoms/Textarea";
+import cfetch from "@/config/fetchapi";
+import { useSession } from "next-auth/react";
+import { TCreateExpense, TExpense } from "@/interfaces/expense";
+import { TTag } from "@/interfaces/tag";
+import { useToast } from "@/providers/toastProvider";
+import { getDayjs } from "@/utils/date";
+import { formatMoney, formatInputMoney, removeMoneyMask } from "@/utils/string";
+import { sendExpenseValidation } from "@/yupSchemas/expense";
+import dayjs from "dayjs";
+import { useFormik } from "formik";
+import { ChangeEvent, useEffect, useState } from "react";
 
 type Props = {
-  expense?: TExpense | null
-}
+  expense?: TExpense | null;
+};
 export default function ExpenseForm({ expense }: Props) {
-  const date = getDayjs()
-  const [submitting, setSubmitting] = useState(false)
-  const [tags, setTags] = useState<TTag[] | null>(null)
-  const { showToast } = useToast()
+  const date = getDayjs();
+  const [submitting, setSubmitting] = useState(false);
+  const [tags, setTags] = useState<TTag[] | null>(null);
+  const { showToast } = useToast();
+  const { data: session } = useSession();
   useEffect(() => {
     const getTags = async () => {
-      const res = await cfetch('/tags', {
-        method: 'GET',
-      })
-      const data = await res.json()
-      setTags(data.tags)
-    }
-    getTags()
-  }, [])
+      const res = await cfetch(
+        "/tags",
+        {
+          method: "GET",
+        },
+        session?.jwt
+      );
+      const data = await res.json();
+      setTags(data.tags);
+    };
+    getTags();
+  }, [session?.jwt]);
   const handleInputMoneyMask = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = formatInputMoney(e)
-    console.log(value)
-    formik.setFieldValue('value', value)
-  }
+    const value = formatInputMoney(e);
+    console.log(value);
+    formik.setFieldValue("value", value);
+  };
   const onSubmit = async (formData: TCreateExpense) => {
     try {
-      setSubmitting(true)
+      setSubmitting(true);
       const data = {
         ...formData,
-      }
-      data.value = removeMoneyMask(String(data.value))
-      const newDate = getDayjs(data.date)
-      data.date = newDate.utc().format()
-      if (!data.tag) data.tag = null
-      data.value = Number(data.value)
-      if (data.pattern === 'loss') data.value = -Math.abs(data.value)
-      const response = await cfetch('/expenses', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      })
+      };
+      data.value = removeMoneyMask(String(data.value));
+      const newDate = getDayjs(data.date);
+      data.date = newDate.utc().format();
+      if (!data.tag) data.tag = null;
+      data.value = Number(data.value);
+      if (data.pattern === "loss") data.value = -Math.abs(data.value);
+      const response = await cfetch(
+        "/expenses",
+        {
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        session?.jwt
+      );
       if (response.status === 200) {
-        showToast('Registro cadastrado com sucesso!', 'success')
+        showToast("Registro cadastrado com sucesso!", "success");
         formik.resetForm({
           values: {
-            value: '',
-            date: date.format('YYYY-MM-DD'),
-            tag: '',
-            description: '',
-            pattern: data.value > 0 ? 'gain' : 'loss',
+            value: "",
+            date: date.format("YYYY-MM-DD"),
+            tag: "",
+            description: "",
+            pattern: data.value > 0 ? "gain" : "loss",
           },
-        })
+        });
       } else {
-        throw ''
+        throw "";
       }
     } catch {
-      showToast('Falha ao cadastrar registro', 'error')
+      showToast("Falha ao cadastrar registro", "error");
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
   const onSubmitUpdate = async (formData: TCreateExpense) => {
     try {
-      setSubmitting(true)
+      setSubmitting(true);
       const data = {
         ...expense,
         ...formData,
-      }
-      debugger
-      data.value = removeMoneyMask(String(data.value))
-      const newDate = getDayjs(data.date)
-      data.date = newDate.utc().format()
-      if (!data.tag) data.tag = null
-      data.value = Number(data.value)
-      if (data.pattern === 'loss') data.value = -Math.abs(data.value)
-      const response = await cfetch('/expenses', {
-        method: 'PUT',
-        body: JSON.stringify(data),
-      })
+      };
+      debugger;
+      data.value = removeMoneyMask(String(data.value));
+      const newDate = getDayjs(data.date);
+      data.date = newDate.utc().format();
+      if (!data.tag) data.tag = null;
+      data.value = Number(data.value);
+      if (data.pattern === "loss") data.value = -Math.abs(data.value);
+      const response = await cfetch(
+        "/expenses",
+        {
+          method: "PUT",
+          body: JSON.stringify(data),
+        },
+        session?.jwt
+      );
       if (response.status === 200) {
-        showToast('Registro alterado com sucesso!', 'success')
+        showToast("Registro alterado com sucesso!", "success");
       } else {
-        throw ''
+        throw "";
       }
     } catch {
-      showToast('Falha ao alterar registro', 'error')
+      showToast("Falha ao alterar registro", "error");
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
   const formik = useFormik({
     initialValues: {
-      value: expense?.value ? formatMoney(Math.abs(Number(expense.value))) : '',
+      value: expense?.value ? formatMoney(Math.abs(Number(expense.value))) : "",
       date: expense?.date
-        ? dayjs(expense.date).format('YYYY-MM-DD')
-        : date.format('YYYY-MM-DD'),
-      tag: expense?.tag?._id ?? '',
-      description: expense?.description ?? '',
-      pattern: expense?.value && Number(expense.value) > 0 ? 'gain' : 'loss',
+        ? dayjs(expense.date).format("YYYY-MM-DD")
+        : date.format("YYYY-MM-DD"),
+      tag: expense?.tag?._id ?? "",
+      description: expense?.description ?? "",
+      pattern: expense?.value && Number(expense.value) > 0 ? "gain" : "loss",
     } satisfies TCreateExpense,
     onSubmit: expense ? onSubmitUpdate : onSubmit,
     validationSchema: sendExpenseValidation,
-  })
+  });
   return (
     <form className="flex gap-2 flex-col" onSubmit={formik.handleSubmit}>
       <Fieldset className="flex-1">
@@ -199,9 +213,9 @@ export default function ExpenseForm({ expense }: Props) {
       </Fieldset>
       <div className="text-end">
         <Button disabled={submitting} type="submit">
-          {submitting ? 'Enviando...' : 'Enviar'}
+          {submitting ? "Enviando..." : "Enviar"}
         </Button>
       </div>
     </form>
-  )
+  );
 }

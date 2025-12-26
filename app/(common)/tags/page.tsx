@@ -1,28 +1,33 @@
-import IconButton from '@/components/atoms/IconButton'
-import Input from '@/components/atoms/Input'
-import { Pagination } from '@/components/atoms/Pagination'
-import TagActions from '@/components/atoms/TagActions'
-import cfetch from '@/config/fetchapi'
-import { TTag } from '@/interfaces/tag'
-import { Search } from 'lucide-react'
-import { Metadata } from 'next'
-import { headers } from 'next/headers'
+import IconButton from "@/components/atoms/IconButton";
+import Input from "@/components/atoms/Input";
+import { Pagination } from "@/components/atoms/Pagination";
+import TagActions from "@/components/atoms/TagActions";
+import cfetch from "@/config/fetchapi";
+import { TTag } from "@/interfaces/tag";
+import { Search } from "lucide-react";
+import { Metadata } from "next";
+import { headers } from "next/headers";
+import { auth } from "@/auth";
 export const metadata: Metadata = {
-  title: 'Gastos do mês',
-}
+  title: "Gastos do mês",
+};
 
 export default async function Tags() {
-  let tags: TTag[] = []
-  let count = 0
-  const savedHeaders = new Headers(await headers())
+  let tags: TTag[] = [];
+  let count = 0;
+  const session = await auth();
+  const savedHeaders = new Headers(await headers());
+  if (session && session.jwt) {
+    savedHeaders.set("Authorization", `Bearer ${session.jwt}`);
+  }
   const response = await cfetch(`/tags`, {
-    method: 'GET',
+    method: "GET",
     headers: savedHeaders,
-  })
+  });
   if (response.status === 200) {
-    const data = await response.json()
-    tags = data.tags
-    count = data.count
+    const data = await response.json();
+    tags = data.tags;
+    count = data.count;
   }
   return (
     <div className="custom-contaier mt-10">
@@ -105,5 +110,5 @@ export default async function Tags() {
         <Pagination />
       </div>
     </div>
-  )
+  );
 }

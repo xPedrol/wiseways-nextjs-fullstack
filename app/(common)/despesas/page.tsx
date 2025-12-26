@@ -1,51 +1,56 @@
-import ExpenseActions from '@/components/atoms/ExpenseActions'
-import ExpensesActions from '@/components/atoms/ExpensesActions'
-import cfetch from '@/config/fetchapi'
-import { TExpense } from '@/interfaces/expense'
-import { getDayjs, ptbrMonths } from '@/utils/date'
-import { formatMoney, getMoneyColor } from '@/utils/string'
-import { BarChart, TrendingDown, TrendingUp } from 'lucide-react'
-import { Metadata } from 'next'
-import { headers } from 'next/headers'
+import ExpenseActions from "@/components/atoms/ExpenseActions";
+import ExpensesActions from "@/components/atoms/ExpensesActions";
+import cfetch from "@/config/fetchapi";
+import { TExpense } from "@/interfaces/expense";
+import { getDayjs, ptbrMonths } from "@/utils/date";
+import { formatMoney, getMoneyColor } from "@/utils/string";
+import { BarChart, TrendingDown, TrendingUp } from "lucide-react";
+import { Metadata } from "next";
+import { headers } from "next/headers";
+import { auth } from "@/auth";
 export const metadata: Metadata = {
-  title: 'Gastos do mês',
-}
+  title: "Gastos do mês",
+};
 const cardStyle =
-  'flex-1 bg-surface-a10 px-4 py-2 rounded-lg flex flex-col min-w-[300px]'
+  "flex-1 bg-surface-a10 px-4 py-2 rounded-lg flex flex-col min-w-[300px]";
 type Props = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 export default async function Expenses({ searchParams }: Props) {
-  const params = await searchParams
-  const date = getDayjs()
-  const start = params.start ?? date.startOf('month').utc().format()
-  const end = params.end ?? date.endOf('month').utc().format()
-  let expenses: TExpense[] = []
-  const searchedDate = getDayjs(String(start))
-  const month = searchedDate.month()
-  const year = searchedDate.year()
-  const savedHeaders = new Headers(await headers())
+  const params = await searchParams;
+  const date = getDayjs();
+  const start = params.start ?? date.startOf("month").utc().format();
+  const end = params.end ?? date.endOf("month").utc().format();
+  let expenses: TExpense[] = [];
+  const searchedDate = getDayjs(String(start));
+  const month = searchedDate.month();
+  const year = searchedDate.year();
+  const session = await auth();
+  const savedHeaders = new Headers(await headers());
+  if (session && session.jwt) {
+    savedHeaders.set("Authorization", `Bearer ${session.jwt}`);
+  }
   const response = await cfetch(`/expenses?start=${start}&end=${end}`, {
-    method: 'GET',
+    method: "GET",
     headers: savedHeaders,
-  })
+  });
   if (response.status === 200) {
-    expenses = await response.json()
+    expenses = await response.json();
   }
   const summaryResponse = await cfetch(
     `/expenses/summary?start=${start}&end=${end}`,
     {
-      method: 'GET',
+      method: "GET",
       headers: savedHeaders,
-    },
-  )
+    }
+  );
   const summary = {
     gain: 0,
     loss: 0,
     total: 0,
-  }
+  };
   if (summaryResponse.status === 200) {
-    Object.assign(summary, await summaryResponse.json())
+    Object.assign(summary, await summaryResponse.json());
   }
   return (
     <div className="custom-contaier mt-10">
@@ -79,7 +84,7 @@ export default async function Expenses({ searchParams }: Props) {
           </p>
         </div>
         <div className="w-full max-md:max-w-full max-w-[400px] relative">
-          <ExpensesActions currentDate={searchedDate.format('YYYY-MM')} />
+          <ExpensesActions currentDate={searchedDate.format("YYYY-MM")} />
         </div>
       </div>
 
@@ -118,11 +123,11 @@ export default async function Expenses({ searchParams }: Props) {
                     </p>
                   </td>
                   <td className="p-4 py-5">
-                    <p className="text-sm ">{expense?.tag?.name ?? '--'}</p>
+                    <p className="text-sm ">{expense?.tag?.name ?? "--"}</p>
                   </td>
                   <td className="p-4 py-5">
                     <p className="text-sm ">
-                      {getDayjs(expense.date).format('DD/MM/YYYY')}
+                      {getDayjs(expense.date).format("DD/MM/YYYY")}
                     </p>
                   </td>
                   <td className="p-4 py-5 max-w-[400px]">
@@ -151,5 +156,5 @@ export default async function Expenses({ searchParams }: Props) {
         <Pagination />
       </div> */}
     </div>
-  )
+  );
 }
