@@ -19,6 +19,7 @@ export const authConfig = {
       let needsAuth = false;
       const apiPage = nextUrl.pathname.includes("/api");
       if (apiPage) {
+        return true;
         needsAuth = apiPages.some((page) => nextUrl.pathname.startsWith(page));
       } else {
         needsAuth = authPages.some((page) => nextUrl.pathname === page);

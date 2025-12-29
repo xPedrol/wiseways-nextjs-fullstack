@@ -7,9 +7,10 @@ import { ValidationError } from "yup";
 
 export async function GET(request: Request) {
   const userId = await getUserIdFromRequest(request);
+  console.log("User ID122:", userId);
   try {
     if (!userId) {
-      return Response.json({ message: "Unauthorized" }, { status: 401 });
+      return Response.json({ message: "Unauthorized1" }, { status: 401 });
     }
     await connectDB();
     const tags = await Tag.find({

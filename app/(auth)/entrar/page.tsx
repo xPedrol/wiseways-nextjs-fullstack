@@ -1,9 +1,9 @@
-import LoginForm from '@/components/molecules/LoginForm'
-import { Metadata } from 'next'
+import LoginForm from "@/components/molecules/LoginForm";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Entrar',
-}
+  title: "Entrar",
+};
 
 export default async function Entrar() {
   return (
@@ -13,5 +13,5 @@ export default async function Entrar() {
         <LoginForm />
       </div>
     </div>
-  )
+  );
 }
