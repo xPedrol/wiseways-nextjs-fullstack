@@ -39,6 +39,7 @@ export async function PUT(request: Request) {
       return Response.json({ message: "Unauthorized" }, { status: 401 });
     }
     const body = await request.json();
+    if (!body.user) body.user = userId;
     await createExpenseValidation.validate(body, {
       abortEarly: false,
       disableStackTrace: true,
