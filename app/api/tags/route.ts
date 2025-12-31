@@ -12,6 +12,20 @@ export async function GET(request: Request) {
     if (!userId) {
       return Response.json({ message: "Unauthorized1" }, { status: 401 });
     }
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+    if (id) {
+      await connectDB();
+      const tag = await Tag.findOne({
+        _id: id,
+        user: userId,
+      });
+      if (!tag) {
+        return Response.json({ message: "Tag not found." }, { status: 404 });
+      }
+      return Response.json(tag);
+    }
+
     await connectDB();
     const tags = await Tag.find({
       user: userId,
@@ -51,6 +65,36 @@ export async function POST(request: Request) {
       return Response.json(error, { status: 400 });
     }
     return Response.json(error, { status: 500 });
+  }
+}
+
+export async function PUT(request: Request) {
+  const userId = await getUserIdFromRequest(request);
+  try {
+    if (!userId) {
+      return Response.json({ message: "Unauthorized" }, { status: 401 });
+    }
+    const body = await request.json();
+    body.user = userId;
+    await createTagValidation.validate(body, {
+      abortEarly: false,
+      disableStackTrace: true,
+    });
+    await connectDB();
+    const tag = await Tag.updateOne(
+      {
+        _id: body._id,
+        user: userId,
+      },
+      body
+    );
+    return Response.json(tag);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return Response.json({ error }, { status: 400 });
+    } else {
+      return Response.json(error, { status: 500 });
+    }
   }
 }
 
